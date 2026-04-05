@@ -4,6 +4,8 @@
 </svelte:head>
 
 <script lang="ts">
+  import { Badge } from '$lib/components/ui/badge';
+  import { Button } from '$lib/components/ui/button';
   import { flip } from '$lib/actions/flip';
   import { pretext } from '$lib/actions/pretext';
   import type { PageData } from './$types';
@@ -43,8 +45,8 @@
             Tap into the latest sources, then open the admin area when you want to review captures.
           </p>
           <div class="toolbar-row">
-            <a class="button-primary" href={data.signInHref}>Sign in</a>
-            <a class="button-secondary" href={data.signInHref}>Admin login</a>
+            <Button href={data.signInHref}>Sign in</Button>
+            <Button href={data.signInHref} variant="secondary">Admin login</Button>
           </div>
         </div>
 
@@ -85,9 +87,9 @@
           <h2 class="panel-title" style="margin: 0;">{data.sourceSummary.latest.title}</h2>
           <p class="subtle" style="margin: 0; max-width: 72ch;">{excerpt(data.sourceSummary.latest.summary, 220)}</p>
           <div class="toolbar-row" style="margin-top: 4px;">
-            <span class="pill">{data.sourceSummary.sourceLabels[data.sourceSummary.latest.source]}</span>
-            <span class="pill">{data.sourceSummary.categoryLabels[data.sourceSummary.latest.category]}</span>
-            <span class="pill">{formatDate(data.sourceSummary.latest.publishedAt)} · {formatClock(data.sourceSummary.latest.publishedAt)}</span>
+            <Badge>{data.sourceSummary.sourceLabels[data.sourceSummary.latest.source]}</Badge>
+            <Badge variant="secondary">{data.sourceSummary.categoryLabels[data.sourceSummary.latest.category]}</Badge>
+            <Badge variant="muted">{formatDate(data.sourceSummary.latest.publishedAt)} · {formatClock(data.sourceSummary.latest.publishedAt)}</Badge>
             <a class="button-secondary" href={data.sourceSummary.latest.url} target="_blank" rel="noreferrer">Open source</a>
           </div>
         </div>

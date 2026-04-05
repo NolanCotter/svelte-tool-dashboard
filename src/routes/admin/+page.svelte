@@ -5,6 +5,8 @@
 <script lang="ts">
   import { base } from '$app/paths';
   import { tick } from 'svelte';
+  import { Badge } from '$lib/components/ui/badge';
+  import { Button } from '$lib/components/ui/button';
   import { Drawer } from 'vaul-svelte';
   import { flip } from '$lib/actions/flip';
   import { pretext } from '$lib/actions/pretext';
@@ -249,10 +251,10 @@
           A Japanese-minimal dashboard for discovering Svelte, Rust, Go, Ruby, HTML/CSS, C/C++/C#, and general news signals from GitHub, X, Instagram, and YouTube, with a calm layout and fast page-flip transitions.
         </p>
         <div class="toolbar-row">
-          <span class="pill">Whitespace-first layout</span>
-          <span class="pill">motion.dev transitions</span>
-          <span class="pill">pretext sizing</span>
-          <span class="pill">daily source refresh</span>
+          <Badge>Whitespace-first layout</Badge>
+          <Badge>motion.dev transitions</Badge>
+          <Badge variant="secondary">pretext sizing</Badge>
+          <Badge variant="muted">daily source refresh</Badge>
         </div>
       </div>
 
@@ -342,12 +344,12 @@
                 <div class="source-item__head">
                   <div style="display:grid; gap: 6px; flex: 1;">
                     <div class="source-item__meta">
-                      <span class="source-badge">{sourceTypeLabel(item)}</span>
-                      <span class="source-badge">{item.score > 0 ? `score ${Math.round(item.score)}` : 'fresh scan'}</span>
+                      <Badge>{sourceTypeLabel(item)}</Badge>
+                      <Badge variant="secondary">{item.score > 0 ? `score ${Math.round(item.score)}` : 'fresh scan'}</Badge>
                     </div>
                     <h4 class="source-item__title">{item.title}</h4>
                   </div>
-                  <span class="tag">{formatDate(item.publishedAt)}</span>
+                  <Badge variant="muted">{formatDate(item.publishedAt)}</Badge>
                 </div>
                 <p class="source-item__summary">{excerpt(item.summary, 220)}</p>
                 <div class="source-item__meta">
@@ -386,8 +388,8 @@
           </p>
         </div>
         <div class="toolbar-row" style="justify-content:flex-end;">
-          <button class="button-secondary" type="button" onclick={() => (settingsOpen = true)}>Settings</button>
-          <button class="button-primary" type="button" onclick={() => (cameraOpen = true)}>Take photo</button>
+          <Button type="button" variant="secondary" onclick={() => (settingsOpen = true)}>Settings</Button>
+          <Button type="button" onclick={() => (cameraOpen = true)}>Take photo</Button>
         </div>
       </div>
 
@@ -418,7 +420,7 @@
             <div class="surface-row" style="display:grid; gap:6px; align-items:start; background: rgba(255,255,255,0.5);">
               <div style="display:flex; justify-content:space-between; gap:12px; align-items:baseline;">
                 <strong>{entry.label}</strong>
-                <span class="tag">{statusLabel(entry.status)}</span>
+                <Badge variant="secondary">{statusLabel(entry.status)}</Badge>
               </div>
               <div class="metric-detail">Score {entry.score} · Confidence {entry.confidence}% · {entry.brackets} brackets</div>
             </div>
@@ -430,7 +432,7 @@
           <h1>No photos yet</h1>
           <p class="lede">The legacy archive stays quiet until a real frame is captured.</p>
           <div class="toolbar-row">
-            <button class="button-primary" type="button" onclick={() => (cameraOpen = true)}>Take first photo</button>
+            <Button type="button" onclick={() => (cameraOpen = true)}>Take first photo</Button>
             <label class="button-secondary" style="position:relative; overflow:hidden;">
               Upload photo
               <input class="input" type="file" accept="image/*" capture="environment" style="position:absolute; inset:0; opacity:0; cursor:pointer;" onchange={handleFileUpload} />
@@ -477,7 +479,7 @@
                     <strong>{record.label}</strong>
                     <p class="metric-detail">{record.dayLabel} · {record.timeLabel}</p>
                   </div>
-                  <span class="tag">{statusLabel(record.metrics.status)}</span>
+                  <Badge variant="secondary">{statusLabel(record.metrics.status)}</Badge>
                 </div>
                 <div class="metric-detail">
                   Visibility {percent(record.metrics.visibility * 100)} · Confidence {percent(record.metrics.confidence * 100)} · {record.metrics.visibleBrackets} brackets
@@ -525,9 +527,7 @@
                 <p class="caption" style="color: var(--danger); margin: 0;">{uploadError}</p>
               {/if}
               <div style="display:flex; flex-wrap:wrap; gap:12px;">
-                <button class="button-primary" type="button" disabled={captureBusy} onclick={captureFrame}>
-                  {captureBusy ? 'Capturing…' : 'Capture frame'}
-                </button>
+                <Button type="button" disabled={captureBusy} onclick={captureFrame}>{captureBusy ? 'Capturing…' : 'Capture frame'}</Button>
                 <label class="button-secondary" style="position:relative; overflow:hidden;">
                   Upload instead
                   <input class="input" type="file" accept="image/*" capture="environment" style="position:absolute; inset:0; opacity:0; cursor:pointer;" onchange={handleFileUpload} />
@@ -553,9 +553,7 @@
               <input type="hidden" name="imageDataUrl" value={capturedImage} />
               <input type="hidden" name="mimeType" value={mimeType} />
 
-              <button class="button-primary" type="submit" disabled={!capturedImage}>
-                Save photo and analyze
-              </button>
+              <Button type="submit" disabled={!capturedImage}>Save photo and analyze</Button>
             </div>
           </div>
         </form>
@@ -596,21 +594,21 @@
                 <strong>Account</strong>
                 <p class="metric-detail">Private admin dashboard</p>
               </div>
-              <span class="tag">secure</span>
+              <Badge variant="secondary">secure</Badge>
             </div>
             <div class="surface-row" style="background: rgba(255,255,255,0.54);">
               <div>
                 <strong>Typography</strong>
                 <p class="metric-detail">Inter with Japanese sans support</p>
               </div>
-              <span class="tag">locked in</span>
+              <Badge variant="secondary">locked in</Badge>
             </div>
             <div class="surface-row" style="background: rgba(255,255,255,0.54);">
               <div>
                 <strong>Theme</strong>
                 <p class="metric-detail">Paper, ink, and quiet green accents</p>
               </div>
-              <span class="tag">zen</span>
+              <Badge variant="secondary">zen</Badge>
             </div>
           </div>
 
@@ -627,8 +625,8 @@
           </div>
 
           <div class="toolbar-row" style="justify-content:space-between; margin-top: auto;">
-            <button class="button-secondary" type="button" onclick={() => (cameraOpen = true)}>Open camera</button>
-            <span class="pill">Admin dashboard</span>
+            <Button type="button" variant="secondary" onclick={() => (cameraOpen = true)}>Open camera</Button>
+            <Badge>Admin dashboard</Badge>
           </div>
         </section>
       </Drawer.Content>

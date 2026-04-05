@@ -2,6 +2,7 @@
   import { base } from '$app/paths';
   import { goto } from '$app/navigation';
   import { authClient } from '$lib/auth-client';
+  import { Button } from '$lib/components/ui/button';
 
   export let data: { admin: boolean; user: { email: string } | null };
 
@@ -30,8 +31,8 @@
       <div class="topbar-meta">
         <span class="pill">{data.user?.email ?? 'signed in'}</span>
         <div class="topbar-actions">
-          <a class="button-secondary" href={`${base}/`}>Landing</a>
-          <button class="button-primary" type="button" onclick={signOut}>Sign out</button>
+          <Button href={`${base}/`} variant="secondary">Landing</Button>
+          <Button type="button" onclick={signOut}>Sign out</Button>
         </div>
       </div>
     </header>

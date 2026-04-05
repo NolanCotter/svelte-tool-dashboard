@@ -7,6 +7,9 @@
   import { base } from '$app/paths';
   import { goto } from '$app/navigation';
   import { authClient } from '$lib/auth-client';
+  import { Button } from '$lib/components/ui/button';
+  import { Card } from '$lib/components/ui/card';
+  import { Input } from '$lib/components/ui/input';
 
   const returnTo = `${base}/admin`;
 
@@ -54,7 +57,7 @@
 
 <div class="page-shell">
   <main class="shell split-grid auth-grid" style="align-items: stretch;">
-    <section class="card sign-in-card auth-hero">
+    <Card className="sign-in-card auth-hero">
       <div class="eyebrow">Protected entry</div>
       <h1 class="login-title">Sign in or recreate Nolan’s account</h1>
       <p class="login-note" style="max-width: 48ch; margin: 0;">
@@ -84,17 +87,17 @@
           <span class="tag">zen</span>
         </div>
       </div>
-    </section>
+    </Card>
 
     <form class="card login-card" onsubmit={submit}>
       <label class="surface-list" style="gap:14px; display:grid;">
         <span class="small-label">Email</span>
-        <input class="input" bind:value={email} type="email" autocomplete="email" placeholder="Email address" required />
+        <Input bind:value={email} type="email" autocomplete="email" placeholder="Email address" required />
       </label>
 
       <label class="surface-list" style="gap:14px; display:grid; margin-top: 10px;">
         <span class="small-label">Password</span>
-        <input class="input" bind:value={password} type="password" autocomplete="current-password" placeholder="Password" required />
+        <Input bind:value={password} type="password" autocomplete="current-password" placeholder="Password" required />
       </label>
 
       {#if error}
@@ -102,10 +105,8 @@
       {/if}
 
       <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top: 6px; justify-content: space-between; align-items: center;">
-        <a class="button-secondary" href={`${base}/`}>Back</a>
-        <button class="button-primary" type="submit" disabled={pending}>
-          {pending ? 'Signing in…' : 'Open workspace'}
-        </button>
+        <Button href={`${base}/`} variant="secondary">Back</Button>
+        <Button type="submit" disabled={pending}>{pending ? 'Signing in…' : 'Open workspace'}</Button>
       </div>
     </form>
   </main>
