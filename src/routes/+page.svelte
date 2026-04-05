@@ -1,150 +1,191 @@
 <svelte:head>
-  <title>svelte-tool-dashboard</title>
-  <meta
-    name="description"
-    content="A minimal SvelteKit dashboard for tracking new Svelte tools and libraries."
-  />
+  <title>Svelte Tool Dashboard</title>
+  <meta name="description" content="Minimal multi-language developer signals workspace." />
 </svelte:head>
 
 <script lang="ts">
-  import { sources } from '$lib/data/sources';
+  import { flip } from '$lib/actions/flip';
+  import { pretext } from '$lib/actions/pretext';
+  import {
+    toolCategoryLabels,
+    toolCategoryOrder,
+    toolSourceLabels,
+    type ToolCategory,
+    type ToolSourceItem
+  } from '$lib/server/tool-sources';
+  import type { PageData } from './$types';
 
-  const stats = [
-    { label: 'Sources', value: '5' },
-    { label: 'Update cadence', value: 'Daily' },
-    { label: 'Mode', value: 'Dark' }
-  ];
+  export let data: PageData;
 
-  const feedItems = [
-    {
-      title: 'SvelteKit OpenTelemetry',
-      meta: 'X · @dummdidumm_ · tracing now lands in instrumentation.server.ts',
-      badge: 'X',
-      href: 'https://x.com/dummdidumm_/status/1998166728174608449'
-    },
-    {
-      title: 'Rust image compressor + SvelteKit',
-      meta: 'X · @leerob · a coding-agent build experiment with SvelteKit in the loop',
-      badge: 'X',
-      href: 'https://x.com/leerob/status/2005700621463330888'
-    },
-    {
-      title: 'Svelte AI Elements',
-      meta: 'X · @Sikandar_Bhide · an in-progress Svelte 5 UI set with animated bits',
-      badge: 'X',
-      href: 'https://animation-svelte.vercel.app'
-    },
-    {
-      title: 'SvelteKit form library',
-      meta: 'Instagram · syntax_fm · auto-generates client-side HTML for forms',
-      badge: 'Instagram',
-      href: 'https://www.instagram.com/reel/DRNWXMvEVdi/'
-    },
-    {
-      title: 'Brand-new SvelteKit deployment',
-      meta: 'Instagram · munyadesign_ · a fresh SvelteKit build walkthrough',
-      badge: 'Instagram',
-      href: 'https://www.instagram.com/p/DJEDEGvvBv4/'
-    },
-    {
-      title: 'lluambo.com',
-      meta: 'Instagram · Svelte + SvelteKit portfolio site with a quiet visual language',
-      badge: 'Instagram',
-      href: 'https://www.instagram.com/reel/DTLZkHkjWyn/'
-    },
-    {
-      title: 'Advent of Svelte 2025 · fork',
-      meta: 'YouTube Shorts · Svelte Society · preloading and tab switching',
-      badge: 'YouTube',
-      href: 'https://www.youtube.com/shorts/WHvNIr6Xhmw'
-    },
-    {
-      title: 'Advent of Svelte 2025 · hydratable',
-      meta: 'YouTube Shorts · CSP-aware hydration and timing details',
-      badge: 'YouTube',
-      href: 'https://www.youtube.com/shorts/tO5aa2vlLQg'
-    },
-    {
-      title: 'How did Svelte do in the State of JavaScript 2025?!',
-      meta: 'YouTube · Svelte ecosystem snapshot and survey talk',
-      badge: 'YouTube',
-      href: 'https://www.youtube.com/watch?v=AuCo3vhL7SQ'
-    },
-    {
-      title: 'Svelte 5 in 2026: Runes-First Engineering for Developers',
-      meta: 'YouTube · a clean 2026 framework overview',
-      badge: 'YouTube',
-      href: 'https://www.youtube.com/watch?v=h7CftX7yTio'
-    }
-  ];
+  let activeCategory: ToolCategory = 'svelte';
+
+  $: activeItems = data.sourceSummary.byCategory[activeCategory] ?? [];
+  $: activeLabel = toolCategoryLabels[activeCategory];
+  $: latestItem = data.sourceSummary.latest;
+
+  function formatDate(value: string) {
+    return new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      day: 'numeric'
+    }).format(new Date(value));
+  }
+
+  function formatClock(value: string) {
+    return new Intl.DateTimeFormat('en-US', {
+      hour: 'numeric',
+      minute: '2-digit'
+    }).format(new Date(value));
+  }
+
+  function excerpt(text: string, length = 160) {
+    const normalized = text.replace(/\s+/g, ' ').trim();
+    if (normalized.length <= length) return normalized;
+    return `${normalized.slice(0, length).trimEnd()}…`;
+  }
+
+  function selectCategory(category: ToolCategory) {
+    activeCategory = category;
+  }
+
+  function sourceLabel(item: ToolSourceItem) {
+    return toolSourceLabels[item.source];
+  }
 </script>
 
 <div class="page-shell">
-  <main class="shell">
-    <section class="card topbar">
-      <div style="max-width: 68ch;">
-        <div class="eyebrow">Svelte tool watch</div>
-        <h1>svelte-tool-dashboard</h1>
-        <p class="lede">
-          A calm, minimal dashboard for aggregating new Svelte signals from
-          GitHub, X, Instagram, YouTube, and daily.dev, with a structure ready for daily automation.
-        </p>
-        <div class="toolbar">
-          <a class="button primary" href="#feed">Open feed</a>
-          <a class="button" href="#sources">View sources</a>
+  <main class="shell landing-grid">
+    <section class="card hero-panel landing-hero zen-hero">
+      <div class="hero-slab">
+        <div class="hero-copy pretext-frame" style="max-width: 64ch;">
+          <div class="eyebrow">Japanese minimalist signal board</div>
+          <h1 class="hero-title" use:pretext={{ min: 34, max: 84 }}>Svelte Tool Dashboard</h1>
+          <p class="lede" style="max-width: 58ch;">
+            A calm workspace for Svelte, Rust, Go, Ruby, HTML/CSS, C/C++/C#, and general news feeds.
+            Tap a lane to flip the preview card while the layout stays soft, quiet, and fast.
+          </p>
+          <div class="toolbar-row">
+            <a class="button-primary" href={data.signInHref}>Sign in</a>
+            <a class="button-secondary" href="/admin/login">Admin login</a>
+          </div>
+        </div>
+
+        <div class="zen-stat-grid" style="max-width: 480px; width: 100%;">
+          <article class="stat-chip zen-stat">
+            <span class="nav-label">Category lanes</span>
+            <strong>{toolCategoryOrder.length}</strong>
+            <p class="metric-detail">Seven language-focused filters keep the feed steady and easy to scan.</p>
+          </article>
+          <article class="stat-chip zen-stat">
+            <span class="nav-label">Source lanes</span>
+            <strong>{data.sourceSummary.sourceCount || 4}</strong>
+            <p class="metric-detail">GitHub, Instagram, X, and YouTube remain the four live source channels.</p>
+          </article>
+          <article class="stat-chip zen-stat">
+            <span class="nav-label">Latest update</span>
+            <strong>{latestItem ? formatDate(latestItem.publishedAt) : 'Pending'}</strong>
+            <p class="metric-detail">Newest item, if available, leads the board with the cleanest rhythm.</p>
+          </article>
+          <article class="stat-chip zen-stat">
+            <span class="nav-label">Motion</span>
+            <strong>Flip</strong>
+            <p class="metric-detail">The selected lane transitions with a crisp page-flip animation.</p>
+          </article>
         </div>
       </div>
 
-      <div class="meta-grid" aria-label="project stats">
-        {#each stats as stat}
-          <div class="meta">
-            <span class="muted">{stat.label}</span>
-            <span class="meta-value">{stat.value}</span>
-          </div>
-        {/each}
+      <div class="meta-grid landing-features">
+        <article class="feature-card">
+          <span class="nav-label">Latest signal</span>
+          {#if latestItem}
+            <strong>{latestItem.title}</strong>
+            <p class="metric-detail">
+              {sourceLabel(latestItem)} · {toolCategoryLabels[latestItem.category]} · {formatDate(latestItem.publishedAt)}
+            </p>
+          {:else}
+            <strong>No source items yet</strong>
+            <p class="metric-detail">Refresh the daily source lanes to populate the board.</p>
+          {/if}
+        </article>
+        <article class="feature-card">
+          <span class="nav-label">Design note</span>
+          <strong>Whitespace-first, with subdued contrast and steady rhythm.</strong>
+          <p class="metric-detail">The landing page stays minimal while the feed board carries the active category state.</p>
+        </article>
       </div>
     </section>
 
-    <section class="grid" style="grid-template-columns: repeat(12, minmax(0, 1fr));">
-      <div class="card panel" id="sources" style="grid-column: span 5;">
-        <h2 class="panel-title">Sources</h2>
-        <p class="muted" style="margin-top: 8px; line-height: 1.6;">
-          The first pass keeps the source list explicit so later automations can add fetchers without
-          changing the UI structure.
-        </p>
-        <div class="source-list" style="margin-top: 16px;">
-          {#each sources as source}
-            <div class="row">
-              <div>
-                <div>{source.label}</div>
-                <div class="muted" style="margin-top: 4px; font-size: 0.92rem;">{source.description}</div>
-              </div>
-              <span class="badge">{source.kind}</span>
-            </div>
+    <section class="card content-card zen-panel">
+      <div style="display:flex; justify-content:space-between; gap: 16px; align-items:flex-start; flex-wrap: wrap;">
+        <div>
+          <div class="section-kicker">Category filters</div>
+          <h2 class="panel-title" style="margin-top: 8px;">Multi-language lanes</h2>
+          <p class="subtle" style="max-width: 58ch; margin: 10px 0 0;">
+            Select a category to flip the preview board. Each lane stays separated so Svelte, Rust, Go,
+            Ruby, HTML/CSS, C/C++/C#, and general news remain easy to skim.
+          </p>
+        </div>
+        <div class="source-rail">
+          {#each toolCategoryOrder as category}
+            <button class={`source-tab ${activeCategory === category ? 'is-active' : ''}`} type="button" onclick={() => selectCategory(category)}>
+              {toolCategoryLabels[category]}
+            </button>
           {/each}
         </div>
       </div>
 
-      <div class="card panel" id="feed" style="grid-column: span 7;">
-        <h2 class="panel-title">Curated feed</h2>
-        <p class="muted" style="margin-top: 8px; line-height: 1.6;">
-          A second, quieter batch of Svelte discoveries from X, Instagram, YouTube,
-          GitHub, and daily.dev, held in the same restrained layout.
-        </p>
-        <div class="feed-list" style="margin-top: 16px;">
-          {#each feedItems as item}
-            <div class="row">
-              <div>
-                <div class="row-title">
-                  <a href={item.href} target="_blank" rel="noreferrer" style="color: inherit; text-decoration: none;">{item.title}</a>
-                </div>
-                <div class="muted" style="margin-top: 4px; font-size: 0.92rem;">{item.meta}</div>
-              </div>
-              <span class="badge">{item.badge}</span>
+      {#key activeCategory}
+        <article class="source-card card" use:flip>
+          <div class="source-card__header">
+            <div>
+              <div class="eyebrow">{activeLabel}</div>
+              <h3 class="panel-title" style="margin-top: 8px;" use:pretext={{ min: 24, max: 42 }}>{activeLabel} feed</h3>
+              <p class="subtle" style="margin: 8px 0 0; max-width: 46ch;">
+                {activeItems.length
+                  ? `${activeItems.length} items are currently cached for this lane.`
+                  : 'No items have been cached for this lane yet.'}
+              </p>
             </div>
-          {/each}
-        </div>
-      </div>
+            <span class="source-chip">{activeItems[0]?.publishedAt ? formatDate(activeItems[0].publishedAt) : 'pending'}</span>
+          </div>
+
+          {#if activeItems.length}
+            <div class="source-list">
+              {#each activeItems.slice(0, 4) as item}
+                <a class="source-item" href={item.url} target="_blank" rel="noreferrer">
+                  <div class="source-item__head">
+                    <div style="display:grid; gap: 6px; flex: 1;">
+                      <div class="source-item__meta">
+                        <span class="source-badge">{sourceLabel(item)}</span>
+                        <span class="source-badge">{item.score > 0 ? `score ${Math.round(item.score)}` : 'fresh scan'}</span>
+                      </div>
+                      <h4 class="source-item__title">{item.title}</h4>
+                    </div>
+                    <span class="tag">{formatDate(item.publishedAt)}</span>
+                  </div>
+                  <p class="source-item__summary">{excerpt(item.summary, 220)}</p>
+                  <div class="source-item__meta">
+                    <div class="metric-detail">
+                      {item.author ? `${item.author} · ` : ''}{formatClock(item.publishedAt)}
+                    </div>
+                    <div style="display:flex; flex-wrap:wrap; gap: 8px;">
+                      {#each item.tags as tag}
+                        <span class="tag">{tag}</span>
+                      {/each}
+                    </div>
+                  </div>
+                </a>
+              {/each}
+            </div>
+          {:else}
+            <div class="source-empty">
+              <strong>Waiting for the first feed pull</strong>
+              <p class="metric-detail" style="margin: 0;">
+                The refresh route will populate this lane as soon as the category-specific source URLs are configured.
+              </p>
+            </div>
+          {/if}
+        </article>
+      {/key}
     </section>
   </main>
 </div>
