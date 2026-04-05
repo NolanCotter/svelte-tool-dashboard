@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { base } from '$app/paths';
   import { goto } from '$app/navigation';
   import { authClient } from '$lib/auth-client';
 
@@ -6,7 +7,7 @@
 
   async function signOut() {
     await authClient.signOut();
-    await goto('/');
+    await goto(`${base}/`);
   }
 </script>
 
@@ -29,7 +30,7 @@
       <div class="topbar-meta">
         <span class="pill">{data.user?.email ?? 'signed in'}</span>
         <div class="topbar-actions">
-          <a class="button-secondary" href="/">Landing</a>
+          <a class="button-secondary" href={`${base}/`}>Landing</a>
           <button class="button-primary" type="button" onclick={signOut}>Sign out</button>
         </div>
       </div>

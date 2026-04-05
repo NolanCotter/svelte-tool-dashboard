@@ -4,6 +4,7 @@
 </svelte:head>
 
 <script lang="ts">
+  import { base } from '$app/paths';
   import { goto } from '$app/navigation';
   import { authClient } from '$lib/auth-client';
 
@@ -101,7 +102,7 @@
       {/if}
 
       <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top: 6px; justify-content: space-between; align-items: center;">
-        <a class="button-secondary" href="/">Back</a>
+        <a class="button-secondary" href={`${base}/`}>Back</a>
         <button class="button-primary" type="submit" disabled={pending}>
           {pending ? 'Signing in…' : 'Open workspace'}
         </button>
