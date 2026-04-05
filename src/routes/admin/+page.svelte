@@ -503,7 +503,7 @@
       <Drawer.Overlay class="drawer-overlay" />
       <Drawer.Content class="drawer-content">
         <div class="drawer-handle"></div>
-        <form class="drawer-panel card" on:submit|preventDefault>
+        <form class="drawer-panel card" onsubmit={(event) => { event.preventDefault(); }}>
           <div style="display:flex; justify-content:space-between; gap:16px; align-items:flex-start;">
             <div>
               <div class="section-kicker">Capture</div>
