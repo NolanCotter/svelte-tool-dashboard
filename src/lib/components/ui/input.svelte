@@ -1,5 +1,6 @@
 <script lang="ts">
+  export let value: string | number | undefined = '';
   export let className = '';
 </script>
 
-<input class={`input ${className}`.trim()} {...$$restProps} />
+<input bind:value class={`input ${className}`.trim()} {...$$restProps} />
