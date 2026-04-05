@@ -7,7 +7,7 @@
   import { Drawer } from 'vaul-svelte';
   import { flip } from '$lib/actions/flip';
   import { pretext } from '$lib/actions/pretext';
-  import { toolCategoryLabels, toolCategoryOrder, toolSourceLabels, type ToolCategory, type ToolSourceItem, type ToolSourceName } from '$lib/server/tool-sources';
+  import type { PageData } from './$types';
 
   type RecordItem = {
     id: string;
@@ -33,34 +33,7 @@
     analysisText: string;
   };
 
-  export let data: {
-    records: RecordItem[];
-    summary: {
-      count: number;
-      averageScore: number;
-      status: 'needs-review' | 'steady' | 'strong-signal';
-      latest: unknown;
-    };
-    series: Array<{
-      label: string;
-      score: number;
-      confidence: number;
-      brackets: number;
-      visibility: number;
-      status: 'needs-review' | 'steady' | 'strong-signal';
-    }>;
-    latest: RecordItem | null;
-    sourceItems: ToolSourceItem[];
-    sourceSummary: {
-      count: number;
-      latest: ToolSourceItem | null;
-      bySource: Record<ToolSourceName, ToolSourceItem[]>;
-      byCategory: Record<ToolCategory, ToolSourceItem[]>;
-      sourceCount: number;
-      categoryCount: number;
-      categoryOrder: ToolCategory[];
-    };
-  };
+  export let data: PageData;
 
   export let form: { error?: string } | undefined;
 
@@ -79,11 +52,15 @@
   let cameraError = '';
   let uploadError = '';
   let captureBusy = false;
+  type ToolCategory = PageData['toolCategoryOrder'][number];
+  type ToolSourceItem = PageData['sourceItems'][number];
+  type ToolSourceName = keyof PageData['toolSourceLabels'];
+
   let activeCategory: ToolCategory = 'svelte';
 
   $: hasRecords = data.summary.count > 0;
   $: activeItems = data.sourceSummary.byCategory[activeCategory] ?? [];
-  $: activeCategoryLabel = toolCategoryLabels[activeCategory];
+  $: activeCategoryLabel = data.toolCategoryLabels[activeCategory];
   $: activeCategoryCount = activeItems.length;
 
   function scalePoints(values: number[], maxValue = 100, minValue = 0) {
@@ -307,7 +284,7 @@
         <span class="nav-label">Latest source</span>
         {#if data.sourceSummary.latest}
           <strong>{data.sourceSummary.latest.title}</strong>
-          <div class="metric-detail">{toolSourceLabels[data.sourceSummary.latest.source]} · {toolCategoryLabels[data.sourceSummary.latest.category ?? 'general-news']} · {formatDate(data.sourceSummary.latest.publishedAt)}</div>
+          <div class="metric-detail">{data.toolSourceLabels[data.sourceSummary.latest.source]} · {data.toolCategoryLabels[data.sourceSummary.latest.category ?? 'general-news']} · {formatDate(data.sourceSummary.latest.publishedAt)}</div>
         {:else}
           <strong>No source items yet</strong>
           <div class="metric-detail">Add category-specific feed URLs to the refresh route and the dashboard will populate automatically.</div>
@@ -336,9 +313,9 @@
         </p>
       </div>
       <div class="source-rail">
-        {#each toolCategoryOrder as category}
+        {#each data.toolCategoryOrder as category}
           <button class={`source-tab ${activeCategory === category ? 'is-active' : ''}`} type="button" onclick={() => openCategory(category)}>
-            {toolCategoryLabels[category]} · {data.sourceSummary.byCategory[category].length}
+            {data.toolCategoryLabels[category]} · {data.sourceSummary.byCategory[category].length}
           </button>
         {/each}
       </div>
