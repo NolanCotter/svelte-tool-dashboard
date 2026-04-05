@@ -90,7 +90,7 @@
             <Badge>{data.sourceSummary.sourceLabels[data.sourceSummary.latest.source]}</Badge>
             <Badge variant="secondary">{data.sourceSummary.categoryLabels[data.sourceSummary.latest.category]}</Badge>
             <Badge variant="muted">{formatDate(data.sourceSummary.latest.publishedAt)} · {formatClock(data.sourceSummary.latest.publishedAt)}</Badge>
-            <a class="button-secondary" href={data.sourceSummary.latest.url} target="_blank" rel="noreferrer">Open source</a>
+            <Button href={data.sourceSummary.latest.url} variant="secondary" target="_blank" rel="noreferrer">Open source</Button>
           </div>
         </div>
       {:else}
