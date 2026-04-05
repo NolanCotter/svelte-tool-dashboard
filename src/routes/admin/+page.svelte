@@ -36,6 +36,7 @@
 
   export let data: PageData;
 
+  const form: { error?: string } = {};
 
   const chartWidth = 780;
   const chartHeight = 240;
