@@ -1,6 +1,8 @@
 <script lang="ts">
-  export let value: string | number | undefined = '';
-  export let className = '';
+  let { value = $bindable(''), className = '', ...rest } = $props<{
+    value?: string | number | undefined;
+    className?: string;
+  }>();
 </script>
 
-<input bind:value class={`input ${className}`.trim()} {...$$restProps} />
+<input bind:value={value} class={`input ${className}`.trim()} {...rest} />
