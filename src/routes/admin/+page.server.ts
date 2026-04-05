@@ -1,8 +1,7 @@
-import { redirect, fail } from '@sveltejs/kit';
-import { analyzeBracesImage } from '$lib/server/vision';
-import { buildDashboardSummary, listPhotoRecords, savePhotoRecord } from '$lib/server/photo-store';
+import { redirect } from '@sveltejs/kit';
+import { buildDashboardSummary, listPhotoRecords } from '$lib/server/photo-store';
 import { buildSourceSummary, listToolSourceItems, toolCategoryLabels, toolCategoryOrder, toolSourceLabels } from '$lib/server/tool-sources';
-import type { Actions, PageServerLoad } from './$types';
+import type { PageServerLoad } from './$types';
 
 function labelDate(date: string) {
   return new Intl.DateTimeFormat('en-US', {
@@ -49,49 +48,3 @@ export const load: PageServerLoad = async () => {
   };
 };
 
-export const actions: Actions = {
-  capture: async ({ request }) => {
-    const form = await request.formData();
-    const imageDataUrl = String(form.get('imageDataUrl') ?? '').trim();
-    const note = String(form.get('note') ?? '').trim();
-    const mimeType = String(form.get('mimeType') ?? 'image/jpeg').trim() || 'image/jpeg';
-
-    if (!imageDataUrl.startsWith('data:image/')) {
-      return fail(400, { error: 'Add a photo first.' });
-    }
-
-    const base64 = imageDataUrl.split(',')[1] ?? '';
-    if (!base64) {
-      return fail(400, { error: 'Could not read the captured image.' });
-    }
-
-    let analysis;
-
-    try {
-      analysis = await analyzeBracesImage({ imageBase64: base64, mimeType, notes: note });
-    } catch (error) {
-      return fail(503, {
-        error: error instanceof Error ? error.message : 'Could not analyze the photo.'
-      });
-    }
-
-    try {
-      await savePhotoRecord({
-        id: crypto.randomUUID(),
-        createdAt: analysis.parsed.timestamp ?? new Date().toISOString(),
-        label: note || 'Capture',
-        note,
-        imageDataUrl,
-        mimeType,
-        observation: analysis.parsed,
-        analysisText: analysis.rawText
-      });
-    } catch (error) {
-      return fail(503, {
-        error: error instanceof Error ? error.message : 'Could not save the photo.'
-      });
-    }
-
-    throw redirect(303, '/admin');
-  }
-};

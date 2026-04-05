@@ -3,6 +3,7 @@
 </svelte:head>
 
 <script lang="ts">
+  import { base } from '$app/paths';
   import { tick } from 'svelte';
   import { Drawer } from 'vaul-svelte';
   import { flip } from '$lib/actions/flip';
@@ -35,7 +36,6 @@
 
   export let data: PageData;
 
-  export let form: { error?: string } | undefined;
 
   const chartWidth = 780;
   const chartHeight = 240;
@@ -503,7 +503,7 @@
       <Drawer.Overlay class="drawer-overlay" />
       <Drawer.Content class="drawer-content">
         <div class="drawer-handle"></div>
-        <form class="drawer-panel card" method="post" action="?/capture">
+        <form class="drawer-panel card" on:submit|preventDefault>
           <div style="display:flex; justify-content:space-between; gap:16px; align-items:flex-start;">
             <div>
               <div class="section-kicker">Capture</div>
