@@ -2,7 +2,7 @@
   import { base } from '$app/paths';
   import { goto } from '$app/navigation';
   import { authClient } from '$lib/auth-client';
-  import { Button } from '$lib/components/ui/button';
+  import Button from '$lib/components/ui/button.svelte';
 
   export let data: { admin: boolean; user: { email: string } | null };
 

@@ -7,9 +7,9 @@
   import { base } from '$app/paths';
   import { goto } from '$app/navigation';
   import { authClient } from '$lib/auth-client';
-  import { Button } from '$lib/components/ui/button';
-  import { Card } from '$lib/components/ui/card';
-  import { Input } from '$lib/components/ui/input';
+  import Button from '$lib/components/ui/button.svelte';
+  import Card from '$lib/components/ui/card.svelte';
+  import Input from '$lib/components/ui/input.svelte';
 
   const returnTo = `${base}/admin`;
 

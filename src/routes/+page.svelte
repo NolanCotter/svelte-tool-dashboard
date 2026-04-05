@@ -4,8 +4,8 @@
 </svelte:head>
 
 <script lang="ts">
-  import { Badge } from '$lib/components/ui/badge';
-  import { Button } from '$lib/components/ui/button';
+  import Badge from '$lib/components/ui/badge.svelte';
+  import Button from '$lib/components/ui/button.svelte';
   import { flip } from '$lib/actions/flip';
   import { pretext } from '$lib/actions/pretext';
   import type { PageData } from './$types';

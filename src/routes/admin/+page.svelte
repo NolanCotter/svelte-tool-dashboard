@@ -5,8 +5,8 @@
 <script lang="ts">
   import { base } from '$app/paths';
   import { tick } from 'svelte';
-  import { Badge } from '$lib/components/ui/badge';
-  import { Button } from '$lib/components/ui/button';
+  import Badge from '$lib/components/ui/badge.svelte';
+  import Button from '$lib/components/ui/button.svelte';
   import { Drawer } from 'vaul-svelte';
   import { flip } from '$lib/actions/flip';
   import { pretext } from '$lib/actions/pretext';
@@ -450,7 +450,7 @@
                 <strong>{data.latest.label}</strong>
                 <p class="metric-detail">{data.latest.dayLabel} · {data.latest.timeLabel}</p>
               </div>
-              <span class="tag">{statusLabel(data.latest.metrics.status)}</span>
+              <Badge variant="secondary">{statusLabel(data.latest.metrics.status)}</Badge>
             </div>
             <div class="metric-detail">
               Visibility {percent(data.latest.metrics.visibility * 100)} · Confidence {percent(data.latest.metrics.confidence * 100)} · {data.latest.metrics.visibleBrackets} brackets
@@ -513,7 +513,7 @@
               <h2 class="panel-title" style="margin-top: 8px;">Take a frame</h2>
               <p class="subtle" style="max-width: 48ch; margin-top: 10px;">Use the camera, capture a frame, and save it with Gemini analysis.</p>
             </div>
-            <Drawer.Close class="button-secondary" type="button">Close</Drawer.Close>
+            <Drawer.Close asChild><Button type="button" variant="secondary">Close</Button></Drawer.Close>
           </div>
 
           <div class="split-grid" style="align-items: start; margin-top: 18px;">
