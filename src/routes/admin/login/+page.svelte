@@ -8,9 +8,9 @@
   import { goto } from '$app/navigation';
   import { authClient } from '$lib/auth-client';
 
-  export let data: { returnTo: string; adminEmail: string };
+  const returnTo = `${base}/admin`;
 
-  let email = data.adminEmail;
+  let email = '';
   let password = '';
   let pending = false;
   let error = '';
@@ -27,9 +27,9 @@
         email: normalizedEmail,
         password,
         rememberMe: true,
-        callbackURL: data.returnTo
+        callbackURL: returnTo
       });
-      await goto(data.returnTo);
+      await goto(returnTo);
       return;
     } catch {
       // Fall through to account bootstrap.
@@ -41,9 +41,9 @@
         email: normalizedEmail,
         password,
         rememberMe: true,
-        callbackURL: data.returnTo
+        callbackURL: returnTo
       });
-      await goto(data.returnTo);
+      await goto(returnTo);
     } catch {
       error = 'That email or password did not work.';
     } finally {
