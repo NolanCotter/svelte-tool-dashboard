@@ -50,6 +50,136 @@
   function sourceLabel(item: ToolSourceItem) {
     return toolSourceLabels[item.source];
   }
+
+  type CuratedPick = {
+    title: string;
+    meta: string;
+    source: string;
+    href: string;
+  };
+
+  const curatedPicks: Record<ToolCategory, CuratedPick[]> = {
+  "rust": [
+    {
+      "title": "rust-lang/rust",
+      "meta": "GitHub · Empowering everyone to build reliable and efficient software.",
+      "source": "GitHub",
+      "href": "https://github.com/rust-lang/rust"
+    },
+    {
+      "title": "Rust on X",
+      "meta": "X · live search for Rust chatter, releases, and conference threads.",
+      "source": "X",
+      "href": "https://x.com/search?q=%23rust%20lang%3Aen&src=typed_query&f=live"
+    },
+    {
+      "title": "Rust 2026 on YouTube",
+      "meta": "YouTube · Rust 2026: $400K Salaries, Java, AI & Why It's Not Everywhere (Yet).",
+      "source": "YouTube",
+      "href": "https://www.youtube.com/watch?v=nOSxuaDgl3s"
+    }
+  ],
+  "go": [
+    {
+      "title": "golang/go",
+      "meta": "GitHub · The Go programming language.",
+      "source": "GitHub",
+      "href": "https://github.com/golang/go"
+    },
+    {
+      "title": "Go on X",
+      "meta": "X · live search for Go releases, tooling, and ecosystem notes.",
+      "source": "X",
+      "href": "https://x.com/search?q=golang%20lang%3Aen&src=typed_query&f=live"
+    },
+    {
+      "title": "Should you learn Go in 2026?",
+      "meta": "YouTube · Melkey keeps it practical and current.",
+      "source": "YouTube",
+      "href": "https://www.youtube.com/watch?v=xW_9zzXZWrA"
+    }
+  ],
+  "ruby": [
+    {
+      "title": "rails/rails",
+      "meta": "GitHub · Ruby on Rails.",
+      "source": "GitHub",
+      "href": "https://github.com/rails/rails"
+    },
+    {
+      "title": "Ruby on X",
+      "meta": "X · live search for Ruby on Rails and Ruby ecosystem updates.",
+      "source": "X",
+      "href": "https://x.com/search?q=Ruby%20on%20Rails%20lang%3Aen&src=typed_query&f=live"
+    },
+    {
+      "title": "RubyConfTH 2026 keynote",
+      "meta": "YouTube · Irina Nazarova on startups on Rails in 2026.",
+      "source": "YouTube",
+      "href": "https://www.youtube.com/watch?v=8Ak3NbvtS7w"
+    }
+  ],
+  "html-css": [
+    {
+      "title": "tailwindlabs/tailwindcss",
+      "meta": "GitHub · Utility-first CSS for rapid UI development.",
+      "source": "GitHub",
+      "href": "https://github.com/tailwindlabs/tailwindcss"
+    },
+    {
+      "title": "CSS on X",
+      "meta": "X · live search for CSS and frontend design signals.",
+      "source": "X",
+      "href": "https://x.com/search?q=CSS%20lang%3Aen&src=typed_query&f=live"
+    },
+    {
+      "title": "10 new CSS features for 2026",
+      "meta": "YouTube · Better Stack keeps the CSS lane sharp.",
+      "source": "YouTube",
+      "href": "https://www.youtube.com/watch?v=svqu6FDiMAs"
+    }
+  ],
+  "cpp-csharp": [
+    {
+      "title": "dotnet/runtime",
+      "meta": "GitHub · .NET runtime for cloud, mobile, desktop, and IoT.",
+      "source": "GitHub",
+      "href": "https://github.com/dotnet/runtime"
+    },
+    {
+      "title": ".NET and C# on X",
+      "meta": "X · live search for .NET, C#, and systems tooling updates.",
+      "source": "X",
+      "href": "https://x.com/search?q=%23dotnet%20lang%3Aen&src=typed_query&f=live"
+    },
+    {
+      "title": "Modular Code with Examples in C#",
+      "meta": "YouTube · Ian Cooper from NDC London 2026.",
+      "source": "YouTube",
+      "href": "https://www.youtube.com/watch?v=ayJ_WJ-8zHo"
+    }
+  ],
+  "general-news": [
+    {
+      "title": "Developer news on X",
+      "meta": "X · live search for current ecosystem chatter and launch threads.",
+      "source": "X",
+      "href": "https://x.com/search?q=developer%20news%20lang%3Aen&src=typed_query&f=live"
+    },
+    {
+      "title": "GitHub Trending",
+      "meta": "GitHub · a quiet pulse of what is moving right now.",
+      "source": "GitHub",
+      "href": "https://github.com/trending"
+    },
+    {
+      "title": "The unhinged world of tech in 2026",
+      "meta": "YouTube · Fireship keeps the broader news lane light and current.",
+      "source": "YouTube",
+      "href": "https://www.youtube.com/watch?v=EKOU3JWDNLI"
+    }
+  ]
+};
 </script>
 
 <div class="page-shell">
@@ -186,6 +316,41 @@
           {/if}
         </article>
       {/key}
+    </section>
+
+    <section class="card content-card zen-panel" style="margin-top: 20px;">
+      <div style="display:flex; justify-content:space-between; gap: 16px; align-items:flex-start; flex-wrap: wrap;">
+        <div>
+          <div class="section-kicker">Curated additions</div>
+          <h2 class="panel-title" style="margin-top: 8px;">High-signal tools and news</h2>
+          <p class="subtle" style="max-width: 58ch; margin: 10px 0 0;">
+            A compact set of carefully chosen links for Rust, Go, Ruby, HTML/CSS, C/C++/C#, and the broader news lane.
+          </p>
+        </div>
+      </div>
+
+      <div style="display:grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin-top: 18px;">
+        {#each toolCategoryOrder as category}
+          <article class="feature-card">
+            <span class="nav-label">{toolCategoryLabels[category]}</span>
+            <div class="source-list" style="margin-top: 12px;">
+              {#each curatedPicks[category] as item}
+                <a class="source-item" href={item.href} target="_blank" rel="noreferrer">
+                  <div class="source-item__head">
+                    <div style="display:grid; gap: 6px; flex: 1;">
+                      <div class="source-item__meta">
+                        <span class="source-badge">{item.source}</span>
+                      </div>
+                      <h4 class="source-item__title">{item.title}</h4>
+                    </div>
+                  </div>
+                  <p class="source-item__summary">{item.meta}</p>
+                </a>
+              {/each}
+            </div>
+          </article>
+        {/each}
+      </div>
     </section>
   </main>
 </div>
