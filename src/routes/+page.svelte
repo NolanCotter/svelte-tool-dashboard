@@ -17,64 +17,64 @@
 
   const feedItems = [
     {
-      title: 'neohtop',
-      meta: 'GitHub Trending · Rust, Tauri, and Svelte · desktop system monitoring',
-      badge: 'GitHub',
-      href: 'https://github.com/Abdenasser/neohtop'
-    },
-    {
-      title: 'daisyUI',
-      meta: 'GitHub Trending · Tailwind CSS component library · strong adoption',
-      badge: 'GitHub',
-      href: 'https://github.com/saadeghi/daisyui'
-    },
-    {
-      title: 'layerchart',
-      meta: 'GitHub Trending · composable Svelte charts · clean data viz',
-      badge: 'GitHub',
-      href: 'https://github.com/techniq/layerchart'
-    },
-    {
-      title: 'kener',
-      meta: 'GitHub Trending · batteries-included status pages · polished ops UI',
-      badge: 'GitHub',
-      href: 'https://github.com/rajnandan1/kener'
-    },
-    {
-      title: 'networking-toolbox',
-      meta: 'GitHub Trending · offline-first networking utilities · practical toolset',
-      badge: 'GitHub',
-      href: 'https://github.com/Lissy93/networking-toolbox'
-    },
-    {
-      title: 'Svelte Summit 2026 on Instagram',
-      meta: 'Instagram · sveltelife reel · conference energy and community signal',
-      badge: 'Instagram',
-      href: 'https://www.instagram.com/reel/DTm_6NpiQSZ/'
-    },
-    {
-      title: 'This Week in Svelte teaser',
-      meta: 'X · SvelteSociety · new episode announcement and runes discussion',
+      title: 'SvelteKit OpenTelemetry',
+      meta: 'X · @dummdidumm_ · tracing now lands in instrumentation.server.ts',
       badge: 'X',
-      href: 'https://x.com/SvelteSociety/status/1831714914140065851'
+      href: 'https://x.com/dummdidumm_/status/1998166728174608449'
     },
     {
-      title: 'How did Svelte do in State of JavaScript 2025?!',
-      meta: 'YouTube · Kev and Jeppe · ecosystem snapshot and survey talk',
+      title: 'Rust image compressor + SvelteKit',
+      meta: 'X · @leerob · a coding-agent build experiment with SvelteKit in the loop',
+      badge: 'X',
+      href: 'https://x.com/leerob/status/2005700621463330888'
+    },
+    {
+      title: 'Svelte AI Elements',
+      meta: 'X · @Sikandar_Bhide · an in-progress Svelte 5 UI set with animated bits',
+      badge: 'X',
+      href: 'https://animation-svelte.vercel.app'
+    },
+    {
+      title: 'SvelteKit form library',
+      meta: 'Instagram · syntax_fm · auto-generates client-side HTML for forms',
+      badge: 'Instagram',
+      href: 'https://www.instagram.com/reel/DRNWXMvEVdi/'
+    },
+    {
+      title: 'Brand-new SvelteKit deployment',
+      meta: 'Instagram · munyadesign_ · a fresh SvelteKit build walkthrough',
+      badge: 'Instagram',
+      href: 'https://www.instagram.com/p/DJEDEGvvBv4/'
+    },
+    {
+      title: 'lluambo.com',
+      meta: 'Instagram · Svelte + SvelteKit portfolio site with a quiet visual language',
+      badge: 'Instagram',
+      href: 'https://www.instagram.com/reel/DTLZkHkjWyn/'
+    },
+    {
+      title: 'Advent of Svelte 2025 · fork',
+      meta: 'YouTube Shorts · Svelte Society · preloading and tab switching',
+      badge: 'YouTube',
+      href: 'https://www.youtube.com/shorts/WHvNIr6Xhmw'
+    },
+    {
+      title: 'Advent of Svelte 2025 · hydratable',
+      meta: 'YouTube Shorts · CSP-aware hydration and timing details',
+      badge: 'YouTube',
+      href: 'https://www.youtube.com/shorts/tO5aa2vlLQg'
+    },
+    {
+      title: 'How did Svelte do in the State of JavaScript 2025?!',
+      meta: 'YouTube · Svelte ecosystem snapshot and survey talk',
       badge: 'YouTube',
       href: 'https://www.youtube.com/watch?v=AuCo3vhL7SQ'
     },
     {
       title: 'Svelte 5 in 2026: Runes-First Engineering for Developers',
-      meta: 'YouTube · framework overview with a 2026 angle',
+      meta: 'YouTube · a clean 2026 framework overview',
       badge: 'YouTube',
       href: 'https://www.youtube.com/watch?v=h7CftX7yTio'
-    },
-    {
-      title: 'Flumio',
-      meta: 'daily.dev · workflow automation startup · featured in the April 2026 Svelte roundup',
-      badge: 'daily.dev',
-      href: 'https://app.daily.dev/posts/what-s-new-in-svelte-april-2026-qmrljmssi'
     }
   ];
 </script>
@@ -86,7 +86,7 @@
         <div class="eyebrow">Svelte tool watch</div>
         <h1>svelte-tool-dashboard</h1>
         <p class="lede">
-          A calm, minimal dashboard for aggregating new Svelte tools and libraries from
+          A calm, minimal dashboard for aggregating new Svelte signals from
           GitHub, X, Instagram, YouTube, and daily.dev, with a structure ready for daily automation.
         </p>
         <div class="toolbar">
@@ -128,8 +128,8 @@
       <div class="card panel" id="feed" style="grid-column: span 7;">
         <h2 class="panel-title">Curated feed</h2>
         <p class="muted" style="margin-top: 8px; line-height: 1.6;">
-          The feed now highlights current Svelte signals from GitHub, X, Instagram, YouTube,
-          and daily.dev without changing the quiet layout.
+          A second, quieter batch of Svelte discoveries from X, Instagram, YouTube,
+          GitHub, and daily.dev, held in the same restrained layout.
         </p>
         <div class="feed-list" style="margin-top: 16px;">
           {#each feedItems as item}
