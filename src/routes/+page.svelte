@@ -4,21 +4,11 @@
 </svelte:head>
 
 <script lang="ts">
-  import { base } from '$app/paths';
   import { flip } from '$lib/actions/flip';
   import { pretext } from '$lib/actions/pretext';
   import type { PageData } from './$types';
 
-  type ToolCategory = PageData['toolCategoryOrder'][number];
-  type ToolSourceItem = PageData['sourceItems'][number];
-
   export let data: PageData;
-
-  let activeCategory: ToolCategory = 'svelte';
-
-  $: activeItems = data.sourceSummary.byCategory[activeCategory] ?? [];
-  $: activeLabel = data.toolCategoryLabels[activeCategory];
-  $: latestItem = data.sourceSummary.latest;
 
   function formatDate(value: string) {
     return new Intl.DateTimeFormat('en-US', {
@@ -39,144 +29,6 @@
     if (normalized.length <= length) return normalized;
     return `${normalized.slice(0, length).trimEnd()}…`;
   }
-
-  function selectCategory(category: ToolCategory) {
-    activeCategory = category;
-  }
-
-  function sourceLabel(item: ToolSourceItem) {
-    return data.toolSourceLabels[item.source];
-  }
-
-  type CuratedPick = {
-    title: string;
-    meta: string;
-    source: string;
-    href: string;
-  };
-
-  const curatedPicks: Record<ToolCategory, CuratedPick[]> = {
-  "rust": [
-    {
-      "title": "rust-lang/rust",
-      "meta": "GitHub · Empowering everyone to build reliable and efficient software.",
-      "source": "GitHub",
-      "href": "https://github.com/rust-lang/rust"
-    },
-    {
-      "title": "Rust on X",
-      "meta": "X · live search for Rust chatter, releases, and conference threads.",
-      "source": "X",
-      "href": "https://x.com/search?q=%23rust%20lang%3Aen&src=typed_query&f=live"
-    },
-    {
-      "title": "Rust 2026 on YouTube",
-      "meta": "YouTube · Rust 2026: $400K Salaries, Java, AI & Why It's Not Everywhere (Yet).",
-      "source": "YouTube",
-      "href": "https://www.youtube.com/watch?v=nOSxuaDgl3s"
-    }
-  ],
-  "go": [
-    {
-      "title": "golang/go",
-      "meta": "GitHub · The Go programming language.",
-      "source": "GitHub",
-      "href": "https://github.com/golang/go"
-    },
-    {
-      "title": "Go on X",
-      "meta": "X · live search for Go releases, tooling, and ecosystem notes.",
-      "source": "X",
-      "href": "https://x.com/search?q=golang%20lang%3Aen&src=typed_query&f=live"
-    },
-    {
-      "title": "Should you learn Go in 2026?",
-      "meta": "YouTube · Melkey keeps it practical and current.",
-      "source": "YouTube",
-      "href": "https://www.youtube.com/watch?v=xW_9zzXZWrA"
-    }
-  ],
-  "ruby": [
-    {
-      "title": "rails/rails",
-      "meta": "GitHub · Ruby on Rails.",
-      "source": "GitHub",
-      "href": "https://github.com/rails/rails"
-    },
-    {
-      "title": "Ruby on X",
-      "meta": "X · live search for Ruby on Rails and Ruby ecosystem updates.",
-      "source": "X",
-      "href": "https://x.com/search?q=Ruby%20on%20Rails%20lang%3Aen&src=typed_query&f=live"
-    },
-    {
-      "title": "RubyConfTH 2026 keynote",
-      "meta": "YouTube · Irina Nazarova on startups on Rails in 2026.",
-      "source": "YouTube",
-      "href": "https://www.youtube.com/watch?v=8Ak3NbvtS7w"
-    }
-  ],
-  "html-css": [
-    {
-      "title": "tailwindlabs/tailwindcss",
-      "meta": "GitHub · Utility-first CSS for rapid UI development.",
-      "source": "GitHub",
-      "href": "https://github.com/tailwindlabs/tailwindcss"
-    },
-    {
-      "title": "CSS on X",
-      "meta": "X · live search for CSS and frontend design signals.",
-      "source": "X",
-      "href": "https://x.com/search?q=CSS%20lang%3Aen&src=typed_query&f=live"
-    },
-    {
-      "title": "10 new CSS features for 2026",
-      "meta": "YouTube · Better Stack keeps the CSS lane sharp.",
-      "source": "YouTube",
-      "href": "https://www.youtube.com/watch?v=svqu6FDiMAs"
-    }
-  ],
-  "cpp-csharp": [
-    {
-      "title": "dotnet/runtime",
-      "meta": "GitHub · .NET runtime for cloud, mobile, desktop, and IoT.",
-      "source": "GitHub",
-      "href": "https://github.com/dotnet/runtime"
-    },
-    {
-      "title": ".NET and C# on X",
-      "meta": "X · live search for .NET, C#, and systems tooling updates.",
-      "source": "X",
-      "href": "https://x.com/search?q=%23dotnet%20lang%3Aen&src=typed_query&f=live"
-    },
-    {
-      "title": "Modular Code with Examples in C#",
-      "meta": "YouTube · Ian Cooper from NDC London 2026.",
-      "source": "YouTube",
-      "href": "https://www.youtube.com/watch?v=ayJ_WJ-8zHo"
-    }
-  ],
-  "general-news": [
-    {
-      "title": "Developer news on X",
-      "meta": "X · live search for current ecosystem chatter and launch threads.",
-      "source": "X",
-      "href": "https://x.com/search?q=developer%20news%20lang%3Aen&src=typed_query&f=live"
-    },
-    {
-      "title": "GitHub Trending",
-      "meta": "GitHub · a quiet pulse of what is moving right now.",
-      "source": "GitHub",
-      "href": "https://github.com/trending"
-    },
-    {
-      "title": "The unhinged world of tech in 2026",
-      "meta": "YouTube · Fireship keeps the broader news lane light and current.",
-      "source": "YouTube",
-      "href": "https://www.youtube.com/watch?v=EKOU3JWDNLI"
-    }
-  ]
-};
 </script>
 
 <div class="page-shell">
@@ -188,11 +40,105 @@
           <h1 class="hero-title" use:pretext={{ min: 34, max: 84 }}>Svelte Tool Dashboard</h1>
           <p class="lede" style="max-width: 58ch;">
             A calm workspace for Svelte, Rust, Go, Ruby, HTML/CSS, C/C++/C#, and general news feeds.
-            Tap a lane to flip the preview card while the layout stays soft, quiet, and fast.
+            Tap into the latest sources, then open the admin area when you want to review captures.
           </p>
           <div class="toolbar-row">
             <a class="button-primary" href={data.signInHref}>Sign in</a>
-            <a class="button-secondary" href={`${base}/admin/login`}>Admin login</a>
+            <a class="button-secondary" href={data.signInHref}>Admin login</a>
           </div>
         </div>
-...
+
+        <div class="zen-stat-grid" style="max-width: 520px; width: 100%;">
+          <article class="stat-chip zen-stat">
+            <span class="nav-label">Sources active</span>
+            <span class="value">{data.sourceSummary.sourceCount}</span>
+            <span class="metric-detail">GitHub, Instagram, X, and YouTube lanes are wired into the dashboard.</span>
+          </article>
+          <article class="stat-chip zen-stat">
+            <span class="nav-label">Language lanes</span>
+            <span class="value">{data.sourceSummary.categoryCount}</span>
+            <span class="metric-detail">Category lanes ready for the daily refresh.</span>
+          </article>
+          <article class="stat-chip zen-stat">
+            <span class="nav-label">Tool snapshot</span>
+            <span class="value">{data.sourceSummary.count}</span>
+            <span class="metric-detail">{data.sourceSummary.count > 0 ? 'Latest signals are available below.' : 'No source items yet.'}</span>
+          </article>
+          <article class="stat-chip zen-stat">
+            <span class="nav-label">Latest update</span>
+            {#if data.sourceSummary.latest}
+              <span class="value">{formatDate(data.sourceSummary.latest.publishedAt)}</span>
+              <span class="metric-detail">{data.sourceSummary.latest.title}</span>
+            {:else}
+              <span class="value">—</span>
+              <span class="metric-detail">Waiting for the first feed refresh.</span>
+            {/if}
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="card panel-card" in:flip={{ duration: 420 }}>
+      <div class="section-kicker">Latest source</div>
+      {#if data.sourceSummary.latest}
+        <div style="display:grid; gap: 10px; margin-top: 10px;">
+          <h2 class="panel-title" style="margin: 0;">{data.sourceSummary.latest.title}</h2>
+          <p class="subtle" style="margin: 0; max-width: 72ch;">{excerpt(data.sourceSummary.latest.summary, 220)}</p>
+          <div class="toolbar-row" style="margin-top: 4px;">
+            <span class="pill">{data.sourceSummary.sourceLabels[data.sourceSummary.latest.source]}</span>
+            <span class="pill">{data.sourceSummary.categoryLabels[data.sourceSummary.latest.category]}</span>
+            <span class="pill">{formatDate(data.sourceSummary.latest.publishedAt)} · {formatClock(data.sourceSummary.latest.publishedAt)}</span>
+            <a class="button-secondary" href={data.sourceSummary.latest.url} target="_blank" rel="noreferrer">Open source</a>
+          </div>
+        </div>
+      {:else}
+        <p class="subtle" style="margin: 0;">No source items yet. Add feed URLs and refresh the dashboard.</p>
+      {/if}
+    </section>
+
+    <section class="card panel-card">
+      <div class="section-kicker">Category lanes</div>
+      <div class="surface-list" style="margin-top: 12px;">
+        {#each data.sourceSummary.categoryOrder as category}
+          <article class="stat-chip">
+            <div style="display:flex; justify-content:space-between; gap: 12px; align-items:baseline;">
+              <strong>{data.sourceSummary.categoryLabels[category]}</strong>
+              <span class="caption">{data.sourceSummary.byCategory[category].length} items</span>
+            </div>
+            {#if data.sourceSummary.byCategory[category][0]}
+              <p class="caption" style="margin: 8px 0 0;">
+                {data.sourceSummary.byCategory[category][0].title} · {formatDate(data.sourceSummary.byCategory[category][0].publishedAt)}
+              </p>
+            {:else}
+              <p class="caption" style="margin: 8px 0 0;">No items yet for this lane.</p>
+            {/if}
+          </article>
+        {/each}
+      </div>
+    </section>
+
+    <section class="card panel-card">
+      <div class="section-kicker">Recent items</div>
+      <div class="surface-list" style="margin-top: 12px;">
+        {#each data.sourceItems.slice(0, 6) as item}
+          <article class="stat-chip">
+            <div style="display:flex; justify-content:space-between; gap: 12px; align-items:baseline;">
+              <strong>{item.title}</strong>
+              <span class="caption">{data.sourceSummary.sourceLabels[item.source]}</span>
+            </div>
+            <p class="caption" style="margin: 8px 0 0;">{excerpt(item.summary, 170)}</p>
+            <div class="caption" style="margin-top: 8px; display:flex; gap: 8px; flex-wrap:wrap;">
+              <span>{data.sourceSummary.categoryLabels[item.category]}</span>
+              <span>·</span>
+              <span>{formatDate(item.publishedAt)}</span>
+              <span>·</span>
+              <a href={item.url} target="_blank" rel="noreferrer">Open</a>
+            </div>
+          </article>
+        {:else}
+          <p class="subtle" style="margin: 0;">No recent items yet.</p>
+        {/each}
+      </div>
+    </section>
+  </main>
+</div>
