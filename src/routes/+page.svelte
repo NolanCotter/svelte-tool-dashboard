@@ -6,21 +6,17 @@
 <script lang="ts">
   import { flip } from '$lib/actions/flip';
   import { pretext } from '$lib/actions/pretext';
-  import {
-    toolCategoryLabels,
-    toolCategoryOrder,
-    toolSourceLabels,
-    type ToolCategory,
-    type ToolSourceItem
-  } from '$lib/server/tool-sources';
   import type { PageData } from './$types';
 
   export let data: PageData;
 
+  type ToolCategory = PageData['data.toolCategoryOrder'][number];
+  type ToolSourceItem = PageData['sourceItems'][number];
+
   let activeCategory: ToolCategory = 'svelte';
 
   $: activeItems = data.sourceSummary.byCategory[activeCategory] ?? [];
-  $: activeLabel = toolCategoryLabels[activeCategory];
+  $: activeLabel = data.toolCategoryLabels[activeCategory];
   $: latestItem = data.sourceSummary.latest;
 
   function formatDate(value: string) {
@@ -48,7 +44,7 @@
   }
 
   function sourceLabel(item: ToolSourceItem) {
-    return toolSourceLabels[item.source];
+    return data.toolSourceLabels[item.source];
   }
 
   type CuratedPick = {
@@ -202,7 +198,7 @@
         <div class="zen-stat-grid" style="max-width: 480px; width: 100%;">
           <article class="stat-chip zen-stat">
             <span class="nav-label">Category lanes</span>
-            <strong>{toolCategoryOrder.length}</strong>
+            <strong>{data.toolCategoryOrder.length}</strong>
             <p class="metric-detail">Seven language-focused filters keep the feed steady and easy to scan.</p>
           </article>
           <article class="stat-chip zen-stat">
@@ -229,7 +225,7 @@
           {#if latestItem}
             <strong>{latestItem.title}</strong>
             <p class="metric-detail">
-              {sourceLabel(latestItem)} · {toolCategoryLabels[latestItem.category]} · {formatDate(latestItem.publishedAt)}
+              {sourceLabel(latestItem)} · {data.toolCategoryLabels[latestItem.category]} · {formatDate(latestItem.publishedAt)}
             </p>
           {:else}
             <strong>No source items yet</strong>
@@ -255,9 +251,9 @@
           </p>
         </div>
         <div class="source-rail">
-          {#each toolCategoryOrder as category}
+          {#each data.toolCategoryOrder as category}
             <button class={`source-tab ${activeCategory === category ? 'is-active' : ''}`} type="button" onclick={() => selectCategory(category)}>
-              {toolCategoryLabels[category]}
+              {data.toolCategoryLabels[category]}
             </button>
           {/each}
         </div>
@@ -330,9 +326,9 @@
       </div>
 
       <div style="display:grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin-top: 18px;">
-        {#each toolCategoryOrder as category}
+        {#each data.toolCategoryOrder as category}
           <article class="feature-card">
-            <span class="nav-label">{toolCategoryLabels[category]}</span>
+            <span class="nav-label">{data.toolCategoryLabels[category]}</span>
             <div class="source-list" style="margin-top: 12px;">
               {#each curatedPicks[category] as item}
                 <a class="source-item" href={item.href} target="_blank" rel="noreferrer">

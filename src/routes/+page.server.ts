@@ -1,6 +1,12 @@
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { buildSourceSummary, listToolSourceItems } from '$lib/server/tool-sources';
+import {
+  buildSourceSummary,
+  listToolSourceItems,
+  toolCategoryLabels,
+  toolCategoryOrder,
+  toolSourceLabels
+} from '$lib/server/tool-sources';
 
 export const load: PageServerLoad = async ({ locals }) => {
   if (locals.user) {
@@ -13,6 +19,9 @@ export const load: PageServerLoad = async ({ locals }) => {
   return {
     signInHref: '/admin/login?returnTo=' + encodeURIComponent('/admin'),
     sourceItems,
-    sourceSummary
+    sourceSummary,
+    toolCategoryLabels,
+    toolCategoryOrder,
+    toolSourceLabels
   };
 };
