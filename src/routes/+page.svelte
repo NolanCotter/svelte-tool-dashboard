@@ -10,7 +10,7 @@
 
   export let data: PageData;
 
-  type ToolCategory = PageData['data.toolCategoryOrder'][number];
+  type ToolCategory = PageData['toolCategoryOrder'][number];
   type ToolSourceItem = PageData['sourceItems'][number];
 
   let activeCategory: ToolCategory = 'svelte';
