@@ -1,21 +1,24 @@
 # svelte-tool-dashboard
 
-A minimal SvelteKit dashboard for tracking new Svelte tools and libraries from GitHub, startups, and daily.dev.
+Minimal SvelteKit dashboard for daily multi-language developer news.
 
-## Goals
-- Aggregate new tool announcements from multiple sources
-- Normalize items into a single feed
-- Support daily automation updates
-- Keep the UI calm, minimal, and dark by default
+## Daily aggregation for gh-pages
 
-## Structure
-- `src/routes/+page.svelte` — dashboard shell and source overview
-- `src/lib/data/sources.ts` — source definitions for GitHub, startups, and daily.dev
-- `src/lib/server/ingest.ts` — ingestion placeholder for future scheduled jobs
-- `src/routes/api/ingest/+server.ts` — API stub for refresh workflows
+The deploy workflow now runs a scheduled daily snapshot before building:
 
-## Next steps
-- Wire source fetchers for GitHub releases, startup launch feeds, and daily.dev
-- Add storage for normalized tool records
-- Schedule daily refreshes and incremental updates
-- Expand item detail views and filtering
+- `npm run snapshot:daily`
+- writes `src/lib/data/daily-snapshot.json`
+- keeps up to 180 deduplicated items
+- homepage uses this snapshot automatically when live storage is empty
+
+Configure feed URLs with environment variables:
+
+`AGGREGATION_{CATEGORY}_{SOURCE}_FEED_URL`
+
+Examples:
+
+- `AGGREGATION_SVELTE_GITHUB_FEED_URL`
+- `AGGREGATION_GENERAL_NEWS_YOUTUBE_FEED_URL`
+
+Categories: `svelte`, `rust`, `go`, `ruby`, `html-css`, `cpp-csharp`, `general-news`  
+Sources: `github`, `instagram`, `x`, `youtube`
