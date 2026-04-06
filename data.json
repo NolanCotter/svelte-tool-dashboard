@@ -1,0 +1,282 @@
+[
+  {
+    "id": "svelte-sveltejs-cli-sv-0-14-1",
+    "source": "github",
+    "category": "svelte",
+    "kind": "tool",
+    "title": "Svelte CLI",
+    "summary": "Patch release that simplifies the runes option and auto-installs Playwright browsers through the prepare script.",
+    "url": "https://github.com/sveltejs/cli/releases/tag/sv%400.14.1",
+    "author": "github-actions[bot]",
+    "publishedAt": "2026-04-06T14:48:51Z",
+    "createdAt": "2026-04-06T16:18:23.373Z",
+    "tags": [
+      "svelte",
+      "cli",
+      "playwright",
+      "runes"
+    ],
+    "note": "Release sv@0.14.1 from sveltejs/cli",
+    "score": 98
+  },
+  {
+    "id": "rust-rust-lang-rust-analyzer-2026-04-06",
+    "source": "github",
+    "category": "rust",
+    "kind": "tool",
+    "title": "rust-analyzer 2026-04-06",
+    "summary": "The latest analyzer release adds a universal VSIX and lands doc macro expansion, inlay-hint, and workspace fixes.",
+    "url": "https://github.com/rust-lang/rust-analyzer/releases/tag/2026-04-06",
+    "author": "github-actions[bot]",
+    "publishedAt": "2026-04-06T06:10:53Z",
+    "createdAt": "2026-04-06T16:18:23.373Z",
+    "tags": [
+      "rust",
+      "language-server",
+      "editor",
+      "vs-code"
+    ],
+    "note": "Release 2026-04-06 from rust-lang/rust-analyzer",
+    "score": 94
+  },
+  {
+    "id": "cpp-csharp-microsoft-terminal-v1-24-10921-0",
+    "source": "github",
+    "category": "cpp-csharp",
+    "kind": "tool",
+    "title": "Windows Terminal v1.24.10921.0",
+    "summary": "Servicing update for Terminal 1.24 with paste, restart, IME, and ConPTY fixes.",
+    "url": "https://github.com/microsoft/terminal/releases/tag/v1.24.10921.0",
+    "author": "DHowett",
+    "publishedAt": "2026-04-03T23:39:36Z",
+    "createdAt": "2026-04-06T16:18:23.373Z",
+    "tags": [
+      "windows",
+      "terminal",
+      "c++",
+      "conpty"
+    ],
+    "note": "Release v1.24.10921.0 from microsoft/terminal",
+    "score": 92
+  },
+  {
+    "id": "general-news-microsoft-vscode-1-114-0",
+    "source": "github",
+    "category": "general-news",
+    "kind": "tool",
+    "title": "VS Code 1.114.0",
+    "summary": "The latest stable Visual Studio Code update from the editor team.",
+    "url": "https://github.com/microsoft/vscode/releases/tag/1.114.0",
+    "author": "alexr00",
+    "publishedAt": "2026-04-01T11:29:58Z",
+    "createdAt": "2026-04-06T16:18:23.373Z",
+    "tags": [
+      "editor",
+      "typescript",
+      "release",
+      "devtools"
+    ],
+    "note": "Release 1.114.0 from microsoft/vscode",
+    "score": 97
+  },
+  {
+    "id": "general-news-vercel-next.js-v16-2-2",
+    "source": "github",
+    "category": "general-news",
+    "kind": "tool",
+    "title": "Next.js v16.2.2",
+    "summary": "Backport release covering create-next-app prompts, Turbopack HMR, and Safari CSS HMR fixes.",
+    "url": "https://github.com/vercel/next.js/releases/tag/v16.2.2",
+    "author": "bgw",
+    "publishedAt": "2026-04-01T00:19:33Z",
+    "createdAt": "2026-04-06T16:18:23.373Z",
+    "tags": [
+      "nextjs",
+      "react",
+      "turbopack",
+      "news"
+    ],
+    "note": "Release v16.2.2 from vercel/next.js",
+    "score": 94
+  },
+  {
+    "id": "svelte-sveltejs-svelte-svelte-5-55-1",
+    "source": "github",
+    "category": "svelte",
+    "kind": "repo",
+    "title": "Svelte core",
+    "summary": "Patch release fixing server bindings, async {@html} hydration, duplicate import messaging, and effect rescheduling.",
+    "url": "https://github.com/sveltejs/svelte/releases/tag/svelte%405.55.1",
+    "author": "github-actions[bot]",
+    "publishedAt": "2026-03-29T20:58:47Z",
+    "createdAt": "2026-04-06T16:18:23.373Z",
+    "tags": [
+      "svelte",
+      "runtime",
+      "hydration",
+      "compiler"
+    ],
+    "note": "Release svelte@5.55.1 from sveltejs/svelte",
+    "score": 96
+  },
+  {
+    "id": "cpp-csharp-microsoft-PowerToys-v0-98-1",
+    "source": "github",
+    "category": "cpp-csharp",
+    "kind": "tool",
+    "title": "PowerToys v0.98.1",
+    "summary": "Patch release focused on stability, Command Palette fixes, and keyboard manager improvements.",
+    "url": "https://github.com/microsoft/PowerToys/releases/tag/v0.98.1",
+    "author": "zateutsch",
+    "publishedAt": "2026-03-26T20:08:39Z",
+    "createdAt": "2026-04-06T16:18:23.373Z",
+    "tags": [
+      "windows",
+      "csharp",
+      "utility",
+      "stability"
+    ],
+    "note": "Release v0.98.1 from microsoft/PowerToys",
+    "score": 90
+  },
+  {
+    "id": "rust-rust-lang-rust-1-94-1",
+    "source": "github",
+    "category": "rust",
+    "kind": "repo",
+    "title": "Rust 1.94.1",
+    "summary": "Toolchain patch fixing wasm32-wasip1-threads spawning, updating Cargo tar handling, and shipping compiler and Clippy fixes.",
+    "url": "https://github.com/rust-lang/rust/releases/tag/1.94.1",
+    "author": "rustbot",
+    "publishedAt": "2026-03-26T13:03:20Z",
+    "createdAt": "2026-04-06T16:18:23.373Z",
+    "tags": [
+      "rust",
+      "compiler",
+      "cargo",
+      "clippy"
+    ],
+    "note": "Release 1.94.1 from rust-lang/rust",
+    "score": 95
+  },
+  {
+    "id": "ruby-rails-rails-v8-1-3",
+    "source": "github",
+    "category": "ruby",
+    "kind": "repo",
+    "title": "Rails 8.1.3",
+    "summary": "Patch release tightening JSON serialization, Active Record behavior, and schema dumping while smoothing Ruby 4.0 warnings.",
+    "url": "https://github.com/rails/rails/releases/tag/v8.1.3",
+    "author": "jhawthorn",
+    "publishedAt": "2026-03-24T20:26:02Z",
+    "createdAt": "2026-04-06T16:18:23.373Z",
+    "tags": [
+      "ruby",
+      "rails",
+      "activerecord",
+      "actionview"
+    ],
+    "note": "Release v8.1.3 from rails/rails",
+    "score": 95
+  },
+  {
+    "id": "ruby-rubocop-rubocop-v1-86-0",
+    "source": "github",
+    "category": "ruby",
+    "kind": "tool",
+    "title": "RuboCop v1.86.0",
+    "summary": "The latest RuboCop adds ZJIT reporting in LSP, new configuration options, and a long list of bug fixes.",
+    "url": "https://github.com/rubocop/rubocop/releases/tag/v1.86.0",
+    "author": "github-actions[bot]",
+    "publishedAt": "2026-03-23T10:39:38Z",
+    "createdAt": "2026-04-06T16:18:23.373Z",
+    "tags": [
+      "ruby",
+      "linting",
+      "style",
+      "lsp"
+    ],
+    "note": "Release v1.86.0 from rubocop/rubocop",
+    "score": 91
+  },
+  {
+    "id": "html-css-tailwindlabs-tailwindcss-v4-2-2",
+    "source": "github",
+    "category": "html-css",
+    "kind": "tool",
+    "title": "Tailwind CSS v4.2.2",
+    "summary": "Patch release adding Vite 8 support and several canonicalization and crash fixes.",
+    "url": "https://github.com/tailwindlabs/tailwindcss/releases/tag/v4.2.2",
+    "author": "github-actions[bot]",
+    "publishedAt": "2026-03-18T16:06:04Z",
+    "createdAt": "2026-04-06T16:18:23.373Z",
+    "tags": [
+      "css",
+      "tailwind",
+      "vite",
+      "ui"
+    ],
+    "note": "Release v4.2.2 from tailwindlabs/tailwindcss",
+    "score": 93
+  },
+  {
+    "id": "go-charmbracelet-bubbletea-v2-0-2",
+    "source": "github",
+    "category": "go",
+    "kind": "tool",
+    "title": "Bubble Tea v2.0.2",
+    "summary": "A fresh terminal UI release in the Bubble Tea v2 line for Go-based TUI apps.",
+    "url": "https://github.com/charmbracelet/bubbletea/releases/tag/v2.0.2",
+    "author": "github-actions[bot]",
+    "publishedAt": "2026-03-09T10:58:01Z",
+    "createdAt": "2026-04-06T16:18:23.373Z",
+    "tags": [
+      "go",
+      "tui",
+      "terminal",
+      "ui"
+    ],
+    "note": "Release v2.0.2 from charmbracelet/bubbletea",
+    "score": 90
+  },
+  {
+    "id": "go-go-task-task-v3-49-1",
+    "source": "github",
+    "category": "go",
+    "kind": "tool",
+    "title": "Task v3.49.1",
+    "summary": "Automation-focused patch release that reverts a regression-prone change and keeps the Go task runner stable.",
+    "url": "https://github.com/go-task/task/releases/tag/v3.49.1",
+    "author": "task-bot",
+    "publishedAt": "2026-03-08T20:08:19Z",
+    "createdAt": "2026-04-06T16:18:23.373Z",
+    "tags": [
+      "go",
+      "task-runner",
+      "automation",
+      "cli"
+    ],
+    "note": "Release v3.49.1 from go-task/task",
+    "score": 88
+  },
+  {
+    "id": "html-css-twbs-bootstrap-v5-3-8",
+    "source": "github",
+    "category": "html-css",
+    "kind": "repo",
+    "title": "Bootstrap v5.3.8",
+    "summary": "The latest Bootstrap release focuses on docs, color-contrast compliance, and a handful of UI bug fixes.",
+    "url": "https://github.com/twbs/bootstrap/releases/tag/v5.3.8",
+    "author": "mdo",
+    "publishedAt": "2025-08-26T02:04:48Z",
+    "createdAt": "2026-04-06T16:18:23.373Z",
+    "tags": [
+      "css",
+      "bootstrap",
+      "components",
+      "html"
+    ],
+    "note": "Release v5.3.8 from twbs/bootstrap",
+    "score": 86
+  }
+]
