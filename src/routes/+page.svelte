@@ -107,7 +107,7 @@
       </div>
 
       {#key activeCategory}
-        <article class="jp-card" use:flip={{ duration: 0.28, distance: 26, turns: 4, immediate: true }}>
+        <article class="jp-card" use:flip={{ duration: 0.28, distance: 26, turns: 4 }}>
           <div class="jp-meta">
             <h2 class="jp-card-title">{activeLabel}</h2>
             <span>{activeItems.length} items</span>
