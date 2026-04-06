@@ -81,7 +81,7 @@ async function fetchFeed(url) {
   });
 }
 
-function parseEntry(source, category, item, index) {
+function parseEntry(source, category, item) {
   const title = asText(item.title) || asText(item.name) || asText(item.caption) || asText(item.headline);
   const summary = asText(item.summary) || asText(item.description) || asText(item.content) || asText(item.excerpt);
   const url = asText(item.url) || asText(item.link) || asText(item.permalink) || asText(item.href);
@@ -90,8 +90,9 @@ function parseEntry(source, category, item, index) {
   const score = Number(item.score ?? item.rank ?? 0);
   if (!title || !url) return null;
   const text = `${title} ${summary}`;
+  const stableId = Buffer.from(`${normalizeUrl(url)}::${normalizeTitle(title)}`).toString('base64url').slice(0, 22);
   return {
-    id: `${category}-${source}-${index}-${Buffer.from(url).toString('base64url').slice(0, 18)}`,
+    id: `${category}-${source}-${stableId}`,
     source,
     category,
     kind: getKind(title, summary),
@@ -131,8 +132,8 @@ async function main() {
     if (!config.feedUrl) continue;
     try {
       const entries = await fetchFeed(config.feedUrl);
-      for (const [index, entry] of entries.entries()) {
-        const parsed = parseEntry(config.source, config.category, entry, index);
+      for (const entry of entries) {
+        const parsed = parseEntry(config.source, config.category, entry);
         if (parsed) fetched.push(parsed);
       }
     } catch (error) {
@@ -149,8 +150,13 @@ async function main() {
     seen.add(key);
     deduped.push(item);
   }
-  deduped.sort((a, b) => (Date.parse(b.publishedAt) || 0) - (Date.parse(a.publishedAt) || 0));
-  const items = deduped.slice(0, maxItems);
+  const withTimestamps = deduped.map((item) => ({
+    item,
+    ts: Date.parse(item.publishedAt) || 0
+  }));
+  withTimestamps.sort((a, b) => b.ts - a.ts);
+  const sorted = withTimestamps.map((entry) => entry.item);
+  const items = sorted.slice(0, maxItems);
 
   await mkdir(dirname(outputPath), { recursive: true });
   await writeFile(outputPath, JSON.stringify({ generatedAt: new Date().toISOString(), items }, null, 2), 'utf8');

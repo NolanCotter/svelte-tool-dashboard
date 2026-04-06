@@ -14,6 +14,7 @@ export function flip(node: HTMLElement, options: FlipOptions = {}) {
     controls?.cancel?.();
     const turns = options.turns ?? 3;
     const distance = options.distance ?? 18;
+    const keyframeTimes = turns > 2 ? [0, 0.38, 0.72, 1] : [0, 0.46, 0.82, 1];
     controls = animate(
       node,
       {
@@ -28,7 +29,7 @@ export function flip(node: HTMLElement, options: FlipOptions = {}) {
       {
         duration: options.duration ?? 0.34,
         easing: [0.11, 0.96, 0.2, 1],
-        times: turns > 2 ? [0, 0.38, 0.72, 1] : [0, 0.46, 0.82, 1]
+        times: keyframeTimes
       }
     );
   };
