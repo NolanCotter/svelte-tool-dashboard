@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  schedule:
+    # Runs daily at 03:12 UTC.
+    - cron: '12 3 * * *'
   workflow_dispatch:
 
 permissions:
@@ -25,6 +28,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+
+      - name: Generate daily snapshot
+        env:
+          NODE_ENV: production
+        run: npm run snapshot:daily
 
       - name: Build site
         env:

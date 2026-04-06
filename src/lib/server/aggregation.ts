@@ -130,10 +130,14 @@ async function fetchFeed(url: string) {
       return found.replace(/<!\[CDATA\[|\]\]>/g, '').trim();
     };
 
+    const rawLink = get('link');
+    const atomHref = chunk.match(/<link[^>]*href=["']([^"']+)["'][^>]*>/i)?.[1] ?? '';
+    const fallbackLink = rawLink.match(/^https?:\/\//i) ? rawLink : atomHref;
+
     return {
       title: get('title'),
       summary: get('description') || get('summary') || get('content'),
-      url: get('link') || get('id'),
+      url: fallbackLink || get('id'),
       author: get('author'),
       pubDate: get('pubDate') || get('updated') || get('published')
     };
@@ -160,5 +164,5 @@ export async function collectDailyToolSnapshot() {
 
   return items
     .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
-    .slice(0, 72);
+    .slice(0, 200);
 }

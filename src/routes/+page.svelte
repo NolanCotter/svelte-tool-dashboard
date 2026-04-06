@@ -1,6 +1,6 @@
 <svelte:head>
-  <title>Svelte Tool Dashboard</title>
-  <meta name="description" content="Minimal multi-language developer signals workspace." />
+  <title>Signals Notebook</title>
+  <meta name="description" content="A clean, fast-flipping daily multi-language developer news notebook." />
 </svelte:head>
 
 <script lang="ts">
@@ -11,6 +11,13 @@
   import type { PageData } from './$types';
 
   export let data: PageData;
+  let activeIndex = 0;
+  let rapidTimer: ReturnType<typeof setInterval> | null = null;
+
+  $: categories = data.sourceSummary.categoryOrder;
+  $: activeCategory = categories[activeIndex] ?? 'general-news';
+  $: activeItems = data.sourceSummary.byCategory[activeCategory] ?? [];
+  $: activeLabel = data.sourceSummary.categoryLabels[activeCategory];
 
   function formatDate(value: string) {
     return new Intl.DateTimeFormat('en-US', {
@@ -31,116 +38,213 @@
     if (normalized.length <= length) return normalized;
     return `${normalized.slice(0, length).trimEnd()}…`;
   }
+
+  function shiftCategory(step: number) {
+    if (!categories.length) return;
+    activeIndex = (activeIndex + step + categories.length) % categories.length;
+  }
+
+  function startRapid(step: number) {
+    stopRapid();
+    shiftCategory(step);
+    rapidTimer = setInterval(() => shiftCategory(step), 110);
+  }
+
+  function stopRapid() {
+    if (rapidTimer) clearInterval(rapidTimer);
+    rapidTimer = null;
+  }
+
+  function wheelFlip(event: WheelEvent) {
+    event.preventDefault();
+    shiftCategory(event.deltaY > 0 ? 1 : -1);
+  }
 </script>
 
-<div class="page-shell">
-  <main class="shell landing-grid">
-    <section class="card hero-panel landing-hero zen-hero">
-      <div class="hero-slab">
-        <div class="hero-copy pretext-frame" style="max-width: 64ch;">
-          <div class="eyebrow">Japanese minimalist signal board</div>
-          <h1 class="hero-title" use:pretext={{ min: 34, max: 84 }}>Svelte Tool Dashboard</h1>
-          <p class="lede" style="max-width: 58ch;">
-            A calm workspace for Svelte, Rust, Go, Ruby, HTML/CSS, C/C++/C#, and general news feeds.
-            Tap into the latest sources, then open the admin area when you want to review captures.
-          </p>
-          <div class="toolbar-row">
-            <Button href={data.signInHref}>Sign in</Button>
-            <Button href={data.signInHref} variant="secondary">Admin login</Button>
+<div class="jp-page">
+  <main class="jp-shell">
+    <header class="jp-hero">
+      <div class="jp-copy">
+        <div class="jp-kicker">letterbox typograph × pretext</div>
+        <h1 class="jp-title" use:pretext={{ min: 36, max: 110, maxLines: 2 }}>Signals Notebook</h1>
+        <p class="jp-lede">
+          Daily Svelte, Rust, Go, Ruby, HTML/CSS, C/C++/C#, and general developer news in a clean, quiet reading space.
+        </p>
+      </div>
+      <div class="jp-actions">
+        <Button href={data.signInHref}>Open admin</Button>
+        <Badge variant="secondary">{data.sourceSummary.count} cached items</Badge>
+      </div>
+    </header>
+
+    <section class="jp-panel" onwheel={wheelFlip}>
+      <div class="jp-panel-head">
+        <div class="jp-kicker">fast page-flip board</div>
+        <div class="jp-controls">
+          <button
+            class="jp-control"
+            type="button"
+            onmousedown={() => startRapid(-1)}
+            onmouseup={stopRapid}
+            onmouseleave={stopRapid}
+            ontouchstart={() => startRapid(-1)}
+            ontouchend={stopRapid}
+          >
+            ◀
+          </button>
+          <button
+            class="jp-control"
+            type="button"
+            onmousedown={() => startRapid(1)}
+            onmouseup={stopRapid}
+            onmouseleave={stopRapid}
+            ontouchstart={() => startRapid(1)}
+            ontouchend={stopRapid}
+          >
+            ▶
+          </button>
+        </div>
+      </div>
+
+      {#key activeCategory}
+        <article class="jp-card" use:flip={{ duration: 0.28, distance: 26, turns: 4 }}>
+          <div class="jp-meta">
+            <h2 class="jp-card-title">{activeLabel}</h2>
+            <span>{activeItems.length} items</span>
           </div>
-        </div>
 
-        <div class="zen-stat-grid" style="max-width: 520px; width: 100%;">
-          <article class="stat-chip zen-stat">
-            <span class="nav-label">Sources active</span>
-            <span class="value">{data.sourceSummary.sourceCount}</span>
-            <span class="metric-detail">GitHub, Instagram, X, and YouTube lanes are wired into the dashboard.</span>
-          </article>
-          <article class="stat-chip zen-stat">
-            <span class="nav-label">Language lanes</span>
-            <span class="value">{data.sourceSummary.categoryCount}</span>
-            <span class="metric-detail">Category lanes ready for the daily refresh.</span>
-          </article>
-          <article class="stat-chip zen-stat">
-            <span class="nav-label">Tool snapshot</span>
-            <span class="value">{data.sourceSummary.count}</span>
-            <span class="metric-detail">{data.sourceSummary.count > 0 ? 'Latest signals are available below.' : 'No source items yet.'}</span>
-          </article>
-          <article class="stat-chip zen-stat">
-            <span class="nav-label">Latest update</span>
-            {#if data.sourceSummary.latest}
-              <span class="value">{formatDate(data.sourceSummary.latest.publishedAt)}</span>
-              <span class="metric-detail">{data.sourceSummary.latest.title}</span>
-            {:else}
-              <span class="value">—</span>
-              <span class="metric-detail">Waiting for the first feed refresh.</span>
-            {/if}
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="card panel-card" in:flip={{ duration: 420 }}>
-      <div class="section-kicker">Latest source</div>
-      {#if data.sourceSummary.latest}
-        <div style="display:grid; gap: 10px; margin-top: 10px;">
-          <h2 class="panel-title" style="margin: 0;">{data.sourceSummary.latest.title}</h2>
-          <p class="subtle" style="margin: 0; max-width: 72ch;">{excerpt(data.sourceSummary.latest.summary, 220)}</p>
-          <div class="toolbar-row" style="margin-top: 4px;">
-            <Badge>{data.sourceSummary.sourceLabels[data.sourceSummary.latest.source]}</Badge>
-            <Badge variant="secondary">{data.sourceSummary.categoryLabels[data.sourceSummary.latest.category]}</Badge>
-            <Badge variant="muted">{formatDate(data.sourceSummary.latest.publishedAt)} · {formatClock(data.sourceSummary.latest.publishedAt)}</Badge>
-            <Button href={data.sourceSummary.latest.url} variant="secondary" target="_blank" rel="noreferrer">Open source</Button>
-          </div>
-        </div>
-      {:else}
-        <p class="subtle" style="margin: 0;">No source items yet. Add feed URLs and refresh the dashboard.</p>
-      {/if}
-    </section>
-
-    <section class="card panel-card">
-      <div class="section-kicker">Category lanes</div>
-      <div class="surface-list" style="margin-top: 12px;">
-        {#each data.sourceSummary.categoryOrder as category}
-          <article class="stat-chip">
-            <div style="display:flex; justify-content:space-between; gap: 12px; align-items:baseline;">
-              <strong>{data.sourceSummary.categoryLabels[category]}</strong>
-              <span class="caption">{data.sourceSummary.byCategory[category].length} items</span>
-            </div>
-            {#if data.sourceSummary.byCategory[category][0]}
-              <p class="caption" style="margin: 8px 0 0;">
-                {data.sourceSummary.byCategory[category][0].title} · {formatDate(data.sourceSummary.byCategory[category][0].publishedAt)}
-              </p>
-            {:else}
-              <p class="caption" style="margin: 8px 0 0;">No items yet for this lane.</p>
-            {/if}
-          </article>
-        {/each}
-      </div>
-    </section>
-
-    <section class="card panel-card">
-      <div class="section-kicker">Recent items</div>
-      <div class="surface-list" style="margin-top: 12px;">
-        {#each data.sourceItems.slice(0, 6) as item}
-          <article class="stat-chip">
-            <div style="display:flex; justify-content:space-between; gap: 12px; align-items:baseline;">
-              <strong>{item.title}</strong>
-              <span class="caption">{data.sourceSummary.sourceLabels[item.source]}</span>
-            </div>
-            <p class="caption" style="margin: 8px 0 0;">{excerpt(item.summary, 170)}</p>
-            <div class="caption" style="margin-top: 8px; display:flex; gap: 8px; flex-wrap:wrap;">
-              <span>{data.sourceSummary.categoryLabels[item.category]}</span>
-              <span>·</span>
-              <span>{formatDate(item.publishedAt)}</span>
-              <span>·</span>
-              <a href={item.url} target="_blank" rel="noreferrer">Open</a>
-            </div>
-          </article>
-        {:else}
-          <p class="subtle" style="margin: 0;">No recent items yet.</p>
-        {/each}
-      </div>
+          {#if activeItems.length}
+            {#each activeItems.slice(0, 8) as item}
+              <a class="jp-item" href={item.url} target="_blank" rel="noreferrer">
+                <strong>{item.title}</strong>
+                <p>{excerpt(item.summary, 180)}</p>
+                <div class="jp-item-meta">
+                  <span>{data.sourceSummary.sourceLabels[item.source]}</span>
+                  <span>{formatDate(item.publishedAt)} · {formatClock(item.publishedAt)}</span>
+                </div>
+              </a>
+            {/each}
+          {:else}
+            <p class="jp-empty">No items in this lane yet.</p>
+          {/if}
+        </article>
+      {/key}
     </section>
   </main>
 </div>
+
+<style>
+  .jp-page {
+    min-height: 100vh;
+    padding: clamp(20px, 5vw, 64px);
+    background: #f8f7f3;
+    color: #1f1b16;
+  }
+  .jp-shell {
+    max-width: 1080px;
+    margin: 0 auto;
+    display: grid;
+    gap: clamp(28px, 4vw, 46px);
+  }
+  .jp-hero {
+    display: grid;
+    gap: 20px;
+    border-bottom: 1px solid rgba(31, 27, 22, 0.15);
+    padding-bottom: 24px;
+  }
+  .jp-copy {
+    display: grid;
+    gap: 12px;
+  }
+  .jp-kicker {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.68rem;
+    opacity: 0.58;
+  }
+  .jp-title {
+    margin: 0;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+  }
+  .jp-lede {
+    margin: 0;
+    max-width: 62ch;
+    line-height: 1.8;
+    opacity: 0.82;
+  }
+  .jp-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+  }
+  .jp-panel {
+    display: grid;
+    gap: 18px;
+    padding-top: 6px;
+  }
+  .jp-panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+  .jp-controls {
+    display: flex;
+    gap: 8px;
+  }
+  .jp-control {
+    border: 1px solid rgba(31, 27, 22, 0.2);
+    background: #fff;
+    color: inherit;
+    border-radius: 999px;
+    width: 34px;
+    height: 34px;
+    cursor: pointer;
+  }
+  .jp-card {
+    display: grid;
+    gap: 12px;
+    background: #fff;
+    border: 1px solid rgba(31, 27, 22, 0.1);
+    border-radius: 20px;
+    padding: clamp(16px, 2.2vw, 24px);
+  }
+  .jp-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: baseline;
+  }
+  .jp-card-title {
+    margin: 0;
+    font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+    letter-spacing: -0.02em;
+  }
+  .jp-item {
+    display: grid;
+    gap: 8px;
+    padding: 12px 0;
+    border-top: 1px solid rgba(31, 27, 22, 0.08);
+  }
+  .jp-item p {
+    margin: 0;
+    line-height: 1.65;
+    opacity: 0.75;
+  }
+  .jp-item-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 0.78rem;
+    opacity: 0.62;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .jp-empty {
+    margin: 0;
+    opacity: 0.62;
+  }
+</style>
