@@ -1,13 +1,15 @@
 <svelte:head>
-  <title>Signals Notebook</title>
-  <meta name="description" content="A clean, fast-flipping daily multi-language developer news notebook." />
+  <title>ToolPulse — Global Language Tool Radar</title>
+  <meta
+    name="description"
+    content="A global language-focused tool and update aggregator with a dedicated intake zone for submitting new language tool updates."
+  />
 </svelte:head>
 
 <script lang="ts">
   import Badge from '$lib/components/ui/badge.svelte';
   import Button from '$lib/components/ui/button.svelte';
   import { flip } from '$lib/actions/flip';
-  import { pretext } from '$lib/actions/pretext';
   import type { PageData } from './$types';
 
   export let data: PageData;
@@ -33,7 +35,7 @@
     }).format(new Date(value));
   }
 
-  function excerpt(text: string, length = 160) {
+  function excerpt(text: string, length = 150) {
     const normalized = text.replace(/\s+/g, ' ').trim();
     if (normalized.length <= length) return normalized;
     return `${normalized.slice(0, length).trimEnd()}…`;
@@ -47,42 +49,81 @@
   function startRapid(step: number) {
     stopRapid();
     shiftCategory(step);
-    rapidTimer = setInterval(() => shiftCategory(step), 110);
+    rapidTimer = setInterval(() => shiftCategory(step), 120);
   }
 
   function stopRapid() {
     if (rapidTimer) clearInterval(rapidTimer);
     rapidTimer = null;
   }
-
-  function wheelFlip(event: WheelEvent) {
-    event.preventDefault();
-    shiftCategory(event.deltaY > 0 ? 1 : -1);
-  }
 </script>
 
-<div class="jp-page">
-  <main class="jp-shell">
-    <header class="jp-hero">
-      <div class="jp-copy">
-        <div class="jp-kicker">letterbox typograph × pretext</div>
-        <h1 class="jp-title" use:pretext={{ min: 36, max: 110, maxLines: 2 }}>Signals Notebook</h1>
-        <p class="jp-lede">
-          Daily Svelte, Rust, Go, Ruby, HTML/CSS, C/C++/C#, and general developer news in a clean, quiet reading space.
+<div class="dashboard-page">
+  <main class="dashboard-shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Global language tool intelligence</p>
+        <h1>ToolPulse</h1>
+        <p class="hero-lede">
+          Track daily launches, updates, and ecosystem movement across programming languages with a news-style,
+          high-signal interface.
         </p>
       </div>
-      <div class="jp-actions">
-        <Button href={data.signInHref}>Open admin</Button>
-        <Badge variant="secondary">{data.sourceSummary.count} cached items</Badge>
+      <div class="hero-actions">
+        <Button href={data.signInHref}>Open Admin Workspace</Button>
+        <Badge variant="secondary">{data.sourceSummary.count} indexed updates</Badge>
       </div>
     </header>
 
-    <section class="jp-panel" onwheel={wheelFlip}>
-      <div class="jp-panel-head">
-        <div class="jp-kicker">fast page-flip board</div>
-        <div class="jp-controls">
+    <section class="panel intake-panel" id="update-intake-zone">
+      <div class="panel-head">
+        <h2>Language Update Intake Zone</h2>
+        <Badge>Intake Target</Badge>
+      </div>
+      <p class="panel-copy">
+        This is the dedicated submit point for new tool entries and language-specific update notes. Keep this zone
+        pinned in your workflow.
+      </p>
+
+      <div class="intake-grid">
+        <label>
+          Language
+          <input placeholder="e.g. TypeScript" aria-label="Language input" />
+        </label>
+        <label>
+          Tool Name
+          <input placeholder="e.g. VitePress" aria-label="Tool name input" />
+        </label>
+        <label>
+          Update Type
+          <select aria-label="Update type selector">
+            <option>Release</option>
+            <option>Breaking Change</option>
+            <option>Security Advisory</option>
+            <option>Ecosystem News</option>
+          </select>
+        </label>
+        <label class="wide">
+          Source URL
+          <input placeholder="https://..." aria-label="Source URL input" />
+        </label>
+        <label class="wide">
+          Update Summary
+          <textarea rows="4" placeholder="Paste the exact update context for aggregation..."></textarea>
+        </label>
+      </div>
+      <div class="intake-actions">
+        <button type="button" class="primary">Queue update (UI placeholder)</button>
+        <span class="muted">Backend hook target: #update-intake-zone</span>
+      </div>
+    </section>
+
+    <section class="panel feed-panel">
+      <div class="panel-head">
+        <h2>{activeLabel}</h2>
+        <div class="controls">
           <button
-            class="jp-control"
+            class="control"
             type="button"
             onmousedown={() => startRapid(-1)}
             onmouseup={stopRapid}
@@ -93,7 +134,7 @@
             ◀
           </button>
           <button
-            class="jp-control"
+            class="control"
             type="button"
             onmousedown={() => startRapid(1)}
             onmouseup={stopRapid}
@@ -107,144 +148,201 @@
       </div>
 
       {#key activeCategory}
-        <article class="jp-card" use:flip={{ duration: 0.28, distance: 26, turns: 4 }}>
-          <div class="jp-meta">
-            <h2 class="jp-card-title">{activeLabel}</h2>
-            <span>{activeItems.length} items</span>
-          </div>
-
+        <div class="feed-grid" use:flip={{ duration: 0.3, distance: 24, turns: 4 }}>
           {#if activeItems.length}
-            {#each activeItems.slice(0, 8) as item}
-              <a class="jp-item" href={item.url} target="_blank" rel="noreferrer">
-                <strong>{item.title}</strong>
-                <p>{excerpt(item.summary, 180)}</p>
-                <div class="jp-item-meta">
-                  <span>{data.sourceSummary.sourceLabels[item.source]}</span>
-                  <span>{formatDate(item.publishedAt)} · {formatClock(item.publishedAt)}</span>
+            {#each activeItems.slice(0, 9) as item}
+              <a class="feed-item" href={item.url} target="_blank" rel="noreferrer">
+                <div class="item-head">
+                  <strong>{item.title}</strong>
+                  <Badge>{data.sourceSummary.sourceLabels[item.source]}</Badge>
+                </div>
+                <p>{excerpt(item.summary)}</p>
+                <div class="item-meta">
+                  <span>{formatDate(item.publishedAt)}</span>
+                  <span>{formatClock(item.publishedAt)}</span>
                 </div>
               </a>
             {/each}
           {:else}
-            <p class="jp-empty">No items in this lane yet.</p>
+            <p class="empty">No updates in this language lane yet.</p>
           {/if}
-        </article>
+        </div>
       {/key}
     </section>
   </main>
 </div>
 
 <style>
-  .jp-page {
+  .dashboard-page {
     min-height: 100vh;
-    padding: clamp(20px, 5vw, 64px);
-    background: #f8f7f3;
-    color: #1f1b16;
+    padding: clamp(18px, 4vw, 48px);
+    background:
+      radial-gradient(circle at top left, #243b91 0%, transparent 45%),
+      radial-gradient(circle at 80% 10%, #6a3093 0%, transparent 40%),
+      #090e1f;
+    color: #eef2ff;
   }
-  .jp-shell {
-    max-width: 1080px;
+  .dashboard-shell {
+    max-width: 1180px;
     margin: 0 auto;
     display: grid;
-    gap: clamp(28px, 4vw, 46px);
+    gap: 22px;
   }
-  .jp-hero {
-    display: grid;
-    gap: 20px;
-    border-bottom: 1px solid rgba(31, 27, 22, 0.15);
-    padding-bottom: 24px;
+  .hero,
+  .panel {
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 22px;
+    background: rgba(10, 16, 35, 0.72);
+    backdrop-filter: blur(14px);
   }
-  .jp-copy {
-    display: grid;
-    gap: 12px;
+  .hero {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    padding: clamp(22px, 2.5vw, 34px);
+    flex-wrap: wrap;
   }
-  .jp-kicker {
+  .eyebrow {
+    margin: 0 0 8px;
     text-transform: uppercase;
-    letter-spacing: 0.18em;
-    font-size: 0.68rem;
-    opacity: 0.58;
+    letter-spacing: 0.14em;
+    font-size: 0.75rem;
+    color: rgba(238, 242, 255, 0.65);
   }
-  .jp-title {
+  h1 {
     margin: 0;
-    line-height: 0.95;
+    font-size: clamp(2rem, 4vw, 3.4rem);
     letter-spacing: -0.04em;
   }
-  .jp-lede {
-    margin: 0;
-    max-width: 62ch;
-    line-height: 1.8;
-    opacity: 0.82;
+  .hero-lede {
+    margin: 10px 0 0;
+    max-width: 64ch;
+    line-height: 1.65;
+    color: rgba(238, 242, 255, 0.82);
   }
-  .jp-actions {
+  .hero-actions {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
+    flex-wrap: wrap;
   }
-  .jp-panel {
-    display: grid;
-    gap: 18px;
-    padding-top: 6px;
+  .panel {
+    padding: clamp(18px, 2.3vw, 26px);
   }
-  .jp-panel-head {
+  .panel-head {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
   }
-  .jp-controls {
-    display: flex;
+  h2 {
+    margin: 0;
+    font-size: clamp(1.15rem, 2vw, 1.6rem);
+  }
+  .panel-copy {
+    margin: 10px 0 16px;
+    color: rgba(238, 242, 255, 0.78);
+    line-height: 1.55;
+  }
+  .intake-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  label {
+    display: grid;
     gap: 8px;
+    font-size: 0.88rem;
+    color: rgba(238, 242, 255, 0.86);
   }
-  .jp-control {
-    border: 1px solid rgba(31, 27, 22, 0.2);
-    background: #fff;
-    color: inherit;
+  input,
+  select,
+  textarea {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+    color: #f8faff;
+    border-radius: 12px;
+    padding: 10px 12px;
+  }
+  .wide {
+    grid-column: 1 / -1;
+  }
+  .intake-actions {
+    margin-top: 14px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .primary {
+    border: none;
     border-radius: 999px;
-    width: 34px;
-    height: 34px;
+    background: linear-gradient(135deg, #7c8bff, #61d3ff);
+    color: #091127;
+    font-weight: 700;
+    padding: 10px 16px;
     cursor: pointer;
   }
-  .jp-card {
-    display: grid;
-    gap: 12px;
-    background: #fff;
-    border: 1px solid rgba(31, 27, 22, 0.1);
-    border-radius: 20px;
-    padding: clamp(16px, 2.2vw, 24px);
+  .muted {
+    color: rgba(238, 242, 255, 0.6);
+    font-size: 0.85rem;
   }
-  .jp-meta {
+  .controls {
     display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    align-items: baseline;
+    gap: 8px;
   }
-  .jp-card-title {
-    margin: 0;
-    font-size: clamp(1.1rem, 1.8vw, 1.4rem);
-    letter-spacing: -0.02em;
+  .control {
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.08);
+    color: #eef2ff;
+    cursor: pointer;
   }
-  .jp-item {
+  .feed-grid {
+    margin-top: 14px;
+    display: grid;
+    gap: 10px;
+  }
+  .feed-item {
     display: grid;
     gap: 8px;
-    padding: 12px 0;
-    border-top: 1px solid rgba(31, 27, 22, 0.08);
+    padding: 14px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+    transition: transform 160ms ease, border-color 160ms ease;
   }
-  .jp-item p {
-    margin: 0;
-    line-height: 1.65;
-    opacity: 0.75;
+  .feed-item:hover {
+    transform: translateY(-2px);
+    border-color: rgba(126, 212, 255, 0.65);
   }
-  .jp-item-meta {
+  .item-head {
     display: flex;
     justify-content: space-between;
-    gap: 12px;
-    flex-wrap: wrap;
-    font-size: 0.78rem;
-    opacity: 0.62;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    gap: 10px;
+    align-items: flex-start;
   }
-  .jp-empty {
+  .feed-item p {
     margin: 0;
-    opacity: 0.62;
+    color: rgba(238, 242, 255, 0.8);
+    line-height: 1.5;
+  }
+  .item-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: rgba(238, 242, 255, 0.65);
+  }
+  .empty {
+    margin: 6px 0 2px;
+    color: rgba(238, 242, 255, 0.75);
+  }
+
+  @media (max-width: 800px) {
+    .intake-grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
