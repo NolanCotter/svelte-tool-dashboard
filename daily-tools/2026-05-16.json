@@ -1,18 +1,13 @@
 {
-  "generatedAt": "2026-05-16T15:12:20.640Z",
+  "generatedAt": "2026-05-16T15:15:01.661Z",
   "date": "2026-05-16",
   "category": "sveltekit",
   "source": "web_search",
   "items": [
     {
-      "name": "language-tools/packages/svelte-check/README.md at master · sveltejs/language-tools · GitHub",
-      "url": "https://github.com/sveltejs/language-tools/blob/master/packages/svelte-check/README.md",
-      "summary": "language-tools/packages/svelte-check/README.md at master · sveltejs/language-tools · GitHub Skip to content"
-    },
-    {
-      "name": "The Svelte Language Server, and official extensions which use it · GitHub",
-      "url": "https://github.com/sveltejs/language-tools",
-      "summary": "# sveltejs/language-tools ## Repository files navigation * README * Contributing * MIT license * Security IDE docs and troubleshooting ## What is Svelte Language Tools?"
+      "name": "Sveltekit - Errors - Online Tutorials Library",
+      "url": "https://www.tutorialspoint.com/svelte/sveltekit-errors.htm",
+      "summary": "Home Whiteboard Practice Code Graphing Calculator Online Compilers Articles Tools Categories"
     }
   ]
 }
